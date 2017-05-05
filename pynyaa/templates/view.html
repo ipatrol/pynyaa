@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ torrent.name }}{% endblock %}
+
+{% block content %}
+
+    <div class="blockBody">
+        <hr>
+        <table class="table table-borderless">
+            <tr class="{{ torrent.status.css_class }}"></tr>
+            <tr>
+                <td>Name</td>
+                <td>{{ torrent.name }}</td>
+            </tr>
+            <tr>
+                <td>Hash</td>
+                <td>{{ torrent.hash }}</td>
+            </tr>
+            <tr>
+                <td>Date</td>
+                <td class="date-full">{{ torrent.date }}</td>
+            </tr>
+            <tr>
+                <td>Size</td>
+                <td>{{ torrent.filesize|pretty_size }}</td>
+            </tr>
+            <tr>
+                <td>Links</td>
+                <td><a aria-label="Magnet Button" href="{{ torrent.magnet }}" type="button"
+                       class="btn btn-success download-btn">
+                    <span class="glyphicon glyphicon-magnet" aria-hidden="true"></span> Download!</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>{{ torrent.description|safe }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

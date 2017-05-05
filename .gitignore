@@ -1,0 +1,9 @@
+
+.idea/
+.py[od]
+__pycache__/
+
+config/*
+!config/sample_config.py
+import/
+nyaapantsu-go/

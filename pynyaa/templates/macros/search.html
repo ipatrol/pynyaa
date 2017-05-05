@@ -1,0 +1,77 @@
+{% macro search_common(search) %}
+    <select name="c" class="form-control input-sm">
+        <option value="_">All categories</option>
+        <option value="3_" {% if search.category == '3_' %}selected{% endif %}>Anime</option>
+        <option value="3_12" {% if search.category == '3_12' %}selected{% endif %}>Anime - Anime MusicVideo</option>
+        <option value="3_5" {% if search.category == '3_5' %}selected{% endif %}>Anime -English-translated</option>
+        <option value="3_13" {% if search.category == '3_13' %}selected{% endif %}>Anime -Non-English-translated</option>
+        <option value="3_6" {% if search.category == '3_6' %}selected{% endif %}>Anime - Raw</option>
+        <option value="2_" {% if search.category == '2_' %}selected{% endif %}>Audio</option>
+        <option value="2_3" {% if search.category == '2_3' %}selected{% endif %}>Audio - Lossless</option>
+        <option value="2_4" {% if search.category == '2_4' %}selected{% endif %}>Audio - Lossy</option>
+        <option value="4_" {% if search.category == '4_' %}selected{% endif %}>Literature</option>
+        <option value="4_7" {% if search.category == '4_7' %}selected{% endif %}>Literature -English-translated</option>
+        <option value="4_8" {% if search.category == '4_8' %}selected{% endif %}>Literature - Raw</option>
+        <option value="4_14" {% if search.category == '4_14' %}selected{% endif %}>Literature -Non-English-translated</option>
+        <option value="5_" {% if search.category == '5_' %}selected{% endif %}>Live Action</option>
+        <option value="5_9" {% if search.category == '5_9' %}selected{% endif %}>Live Action -English-translated</option>
+        <option value="5_10" {% if search.category == '5_10' %}selected{% endif %}>Live Action -Idol/Promotional Video</option>
+        <option value="5_18" {% if search.category == '5_18' %}selected{% endif %}>Live Action -Non-English-translated</option>
+        <option value="5_11" {% if search.category == '5_11' %}selected{% endif %}>Live Action - Raw</option>
+        <option value="6_" {% if search.category == '6_' %}selected{% endif %}>Pictures</option>
+        <option value="6_15" {% if search.category == '6_15' %}selected{% endif %}>Pictures - Graphics</option>
+        <option value="6_16" {% if search.category == '6_16' %}selected{% endif %}>Pictures - Photos</option>
+        <option value="1_" {% if search.category == '1_' %}selected{% endif %}>Software</option>
+        <option value="1_1" {% if search.category == '1_1' %}selected{% endif %}>Software - Applications</option>
+        <option value="1_2" {% if search.category == '1_2' %}selected{% endif %}>Software - Games</option>
+    </select>
+    <select name="s" class="form-control input-sm">
+        <option value="">Show all</option>
+        <option value="2" {% if search.status == '2' %}selected{% endif %}>Filter Remakes</option>
+        <option value="3" {% if search.status == '3' %}selected{% endif %}>Trusted</option>
+        <option value="4" {% if search.status == '4' %}selected{% endif %}>A+</option>
+    </select>
+{% endmacro %}
+
+{% macro search_advanced(search) %}
+    <select name="sort" class="form-control input-sm">
+        <option value="torrent_id" {% if search.sort == 'id' %}selected{% endif %}>ID</option>
+        <option value="torrent_name" {% if search.sort == 'name' %}selected{% endif %}>Name</option>
+        <option value="date" {% if search.sort == 'date' %}selected{% endif %}>Date</option>
+        <option value="downloads" {% if search.sort == 'downloads' %}selected{% endif %}>Downloads</option>
+    </select>
+    <select name="order" class="form-control input-sm">
+        <option value="desc" {% if search.order == 'desc' %}selected{% endif %}>Descending</option>
+        <option value="asc" {% if search.order == 'asc' %}selected{% endif %}>Ascending</option>
+    </select>
+    <select name="max" class="form-control input-sm">
+        <option value="5" {% if search.maxperpage == 5 %}selected{% endif %}>5</option>
+        <option value="10" {% if search.maxperpage == 10 %}selected{% endif %}>10</option>
+        <option value="15" {% if search.maxperpage == 15 %}selected{% endif %}>15</option>
+        <option value="20" {% if search.maxperpage == 20 %}selected{% endif %}>20</option>
+        <option value="25" {% if search.maxperpage == 25 %}selected{% endif %}>25</option>
+        <option value="30" {% if search.maxperpage == 30 %}selected{% endif %}>30</option>
+        <option value="35" {% if search.maxperpage == 35 %}selected{% endif %}>35</option>
+        <option value="40" {% if search.maxperpage == 40 %}selected{% endif %}>40</option>
+        <option value="45" {% if search.maxperpage == 45 %}selected{% endif %}>45</option>
+        <option value="50" {% if search.maxperpage == 50 %}selected{% endif %}>50</option>
+        <option value="70" {% if search.maxperpage == 70 %}selected{% endif %}>70</option>
+        <option value="100" {% if search.maxperpage == 100 %}selected{% endif %}>100</option>
+        <option value="150" {% if search.maxperpage == 150 %}selected{% endif %}>150</option>
+        <option value="200" {% if search.maxperpage == 200 %}selected{% endif %}>200</option>
+        <option value="300" {% if search.maxperpage == 300 %}selected{% endif %}>300</option>
+    </select>
+{% endmacro %}
+
+{% macro search_button(search) %}
+    <div class="input-group">
+        <input name="q" class="form-control input-sm" placeholder="Search" type="text"
+               value="{{ search.query }}">
+        <span class="input-group-btn">
+          <button type="submit" class="btn btn-sm btn-success">
+              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              Search
+          </button>
+        </span>
+    </div>
+{% endmacro %}
