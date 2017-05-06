@@ -32,7 +32,11 @@
                                 {{ torrent.name }}
                             </a>
                         </td>
-                        <td class="date date-short">{{ torrent.date.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <time datetime="{{ torrent.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
+                                {{ torrent.date.strftime('%Y-%m-%d') }}
+                            </time>
+                        </td>
                         <td class="filesize">{{ torrent.filesize|pretty_size }}</td>
                         <td>
                             <a href="{{ torrent.magnet }}" title="Magnet link">
