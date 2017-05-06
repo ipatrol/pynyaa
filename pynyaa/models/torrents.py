@@ -5,7 +5,7 @@ from .. import db
 class Torrent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(1024))
-    hash = db.Column(db.String(40))
+    hash = db.Column(db.String(40), index=True)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship('Category', backref='torrents')
@@ -16,10 +16,10 @@ class Torrent(db.Model):
     status_id = db.Column(db.Integer, db.ForeignKey('status.id'))
     status = db.relationship('Status', backref='torrents')
 
-    date = db.Column(db.DateTime(True))
-    downloads = db.Column(db.Integer)
-    stardom = db.Column(db.Integer)
-    filesize = db.Column(db.BigInteger)
+    date = db.Column(db.DateTime(True), index=True)
+    downloads = db.Column(db.Integer, index=True)
+    stardom = db.Column(db.Integer, index=True)
+    filesize = db.Column(db.BigInteger, index=True)
     is_exact = db.Column(db.Boolean)
 
     description = db.Column(db.Text)
