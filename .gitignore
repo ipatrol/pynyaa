@@ -1,5 +1,6 @@
 
 .idea/
+.venv/
 .py[od]
 __pycache__/
 
