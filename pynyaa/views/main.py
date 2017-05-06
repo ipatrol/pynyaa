@@ -38,18 +38,24 @@ def home(page=1):
         query = query.filter(models.Torrent.status_id == int(search['status']))
 
     if search['query']:
-        words = search['query'].split()
-        for word in words:
-            query = query.filter(models.Torrent.name.ilike(f'%{word}%'))
+        if len(search['query']) == 40 and all(char in '0123456789abcdef'
+                                              for char in search['query'].lower()):
+            query = query.filter(models.Torrent.hash == search['query'].lower())
+        else:
+            words = search['query'].split()
+            for word in words:
+                query = query.filter(models.Torrent.name.ilike(f'%{word}%'))
 
     if search['sort'] and search['sort'] in ('id', 'name', 'date', 'downloads'):
         sort_column = getattr(models.Torrent, search['sort'])
     else:
         sort_column = models.Torrent.id
+        search['sort'] = 'id'
 
     ordering = 'desc'
     if search['order'] and search['order'] in ('asc', 'desc'):
         ordering = search['order']
+    search['order'] = ordering
 
     sort_and_ordering = getattr(sort_column, ordering)()
     query = query.order_by(sort_and_ordering)
