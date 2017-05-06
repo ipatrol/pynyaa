@@ -19,10 +19,11 @@ def home(page=1):
             db.joinedload(models.Torrent.status),
         )
 
-    # no point in listing torrents that don't have hashes
+    # no point in listing torrents that don't have hashes or filesizes
     query = query.filter(db.and_(
         models.Torrent.hash.isnot(None),
-        models.Torrent.hash != ''
+        models.Torrent.hash != '',
+        models.Torrent.filesize != 0
     ))
 
     search = g.search
