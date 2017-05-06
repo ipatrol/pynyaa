@@ -1,8 +1,10 @@
 
 import math
 
-from flask import request, url_for
+from flask import request, url_for, current_app, g
 from markupsafe import Markup
+
+from .. import models
 
 
 def pretty_size(size):
@@ -23,3 +25,36 @@ def url_for_other_page(page):
 def cdatasafe(text):
     text = text.replace(']]>', '')
     return Markup(text)
+
+
+def inject_search_data():
+    """before_request hook"""
+    map_long_names = dict(
+        c='category',
+        s='status',
+        q='query',
+    )
+    search = dict(
+        category='',
+        status='',
+        sort='',
+        order='',
+        max='',
+        query='',
+    )
+    for key in request.args:
+        if key in ('c', 'category', 's', 'status', 'sort', 'order', 'max', 'q', 'query'):
+            search[map_long_names.get(key, key)] = request.args.get(key)
+
+    if 'max' not in search:
+        search['max'] = 50
+
+    try:
+        search['max'] = int(search['max'])
+    except ValueError:
+        search['max'] = 50
+
+    search['max'] = min(300, max(5, search['max']))
+
+    current_app.jinja_env.globals['search'] = search
+    g.search = search

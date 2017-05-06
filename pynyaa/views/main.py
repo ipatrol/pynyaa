@@ -1,5 +1,5 @@
 
-from flask import Blueprint, render_template, abort, request, Response
+from flask import Blueprint, render_template, abort, request, Response, g
 
 from .. import models, db
 
@@ -19,33 +19,7 @@ def home(page=1):
             db.joinedload(models.Torrent.status),
         )
 
-    map_long_names = dict(
-        c='category',
-        s='status',
-        q='query',
-    )
-    search = dict(
-        category='',
-        status='',
-        sort='',
-        order='',
-        max='',
-        query='',
-    )
-    for key in request.args:
-        if key in ('c', 'category', 's', 'status', 'sort', 'order', 'max', 'q', 'query'):
-            search[map_long_names.get(key, key)] = request.args.get(key)
-
-    if 'max' not in search:
-        search['max'] = 50
-
-    try:
-        search['max'] = int(search['max'])
-    except ValueError:
-        search['max'] = 50
-
-    search['max'] = min(300, max(5, search['max']))
-
+    search = g.search
     if search['category'] and '_' in search['category']:
         cat, subcat = search['category'].split('_', 1)
         if cat and cat.isdigit():
@@ -76,10 +50,10 @@ def home(page=1):
     pagination = query.paginate(page=page, per_page=search['max'])
     if request.endpoint == 'main.feed':
         return Response(
-            render_template('feed.xml', search=search, torrents_pagination=pagination),
+            render_template('feed.xml', torrents_pagination=pagination),
             mimetype='application/xml')
     else:
-        return render_template('home.html', search=search, torrents_pagination=pagination)
+        return render_template('home.html', torrents_pagination=pagination)
 
 
 @main.route('/api/<int:page>')

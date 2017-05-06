@@ -34,12 +34,12 @@
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('main.faq') }}">FAQ</a></li>
                 <li><a href="irc://irc.rizon.net/tonari.">IRC</a></li>
-                <li><a href="{{ url_for('main.feed', **(search or {})) }}">Feed</a></li>
+                <li><a href="{{ url_for('main.feed', **(search)) }}">Feed</a></li>
             </ul>
             <form class="navbar-form navbar-right" role="search" action="{{ url_for('main.search') }}" method="get">
                 <div class="form-group">
-                    {{ s.search_common(search or {}) }}
-                    {{ s.search_button(search or {}) }}
+                    {{ s.search_common(search) }}
+                    {{ s.search_button(search) }}
                 </div>
             </form>
         </div>
@@ -54,9 +54,9 @@
         <font size="4.5">Advanced Search</font><br/>
         <form class="navbar-form" role="search" action="{{ url_for('main.search') }}" method="get">
             <div class="form-group">
-                {{ s.search_common(search or {}) }}
-                {{ s.search_advanced(search or {}) }}
-                {{ s.search_button(search or {}) }}
+                {{ s.search_common(search) }}
+                {{ s.search_advanced(search) }}
+                {{ s.search_button(search) }}
             </div>
         </form>
         <div style="clear:both"></div>

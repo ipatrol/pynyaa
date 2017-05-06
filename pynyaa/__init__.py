@@ -15,6 +15,7 @@ def create_app(config: str) -> Flask:
 
     init_blueprints(app)
     init_jinja_env(app)
+    init_hooks(app)
 
     return app
 
@@ -29,3 +30,8 @@ def init_jinja_env(app: Flask):
     app.jinja_env.filters['pretty_size'] = utils.pretty_size
     app.jinja_env.filters['cdatasafe'] = utils.cdatasafe
     app.jinja_env.globals['url_for_other_page'] = utils.url_for_other_page
+
+
+def init_hooks(app: Flask):
+    from . import utils
+    app.before_request(utils.inject_search_data)
