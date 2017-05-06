@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>PyNyaa</title>
+    <id>pynyaaaaaaaaaaaaaaaaaaaaaaa</id>
+    <updated>{{ 2 }}</updated>
+
+    {% for torrent in torrents_pagination.items %}
+    <entry>
+        <title>{{ torrent.name }}</title>
+        <link href="{{ url_for('main.torrent_view', torrent_id=torrent.id) }}"/>
+        <id>{{ torrent.id }}</id>
+        <updated>{{ torrent.date.strftime('%Y-%m-%dT%H:%M:%SZ') }}</updated>
+        <summary>{{ torrent.name }}</summary>
+        <content><![CDATA[{{ torrent.description|cdatasafe }}]]></content>
+    </entry>
+    {% endfor %}
+</feed>

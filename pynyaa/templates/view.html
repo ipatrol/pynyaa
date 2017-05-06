@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}{{ torrent.name }}{% endblock %}
+{% block container_class %}cont-view{% endblock %}
+
+{% block content %}
+    <div class="blockBody">
+        <hr>
+        <table class="table table-borderless">
+            <colgroup>
+                <col width="10%" />
+                <col/>
+            </colgroup>
+            <tr class="{{ torrent.status.css_class }}"></tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ torrent.name }}</td>
+            </tr>
+            <tr>
+                <th>Hash</th>
+                <td>{{ torrent.hash }}</td>
+            </tr>
+            <tr>
+                <th>Upload date</th>
+                <td class="date-full">{{ torrent.date }}</td>
+            </tr>
+            <tr>
+                <th>Size</th>
+                <td>{{ torrent.filesize|pretty_size }}</td>
+            </tr>
+            <tr>
+                <th>Links</th>
+                <td><a aria-label="Magnet Button" href="{{ torrent.magnet }}" type="button"
+                       class="btn btn-success download-btn">
+                    <span class="glyphicon glyphicon-magnet" aria-hidden="true"></span>
+                    Download!</a>
+                </td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ torrent.description }}</td>
+            </tr>
+        </table>
+
+    {% if not torrent.is_sqlite_import %}
+        <hr>
+        <h2>Torrent details</h2>
+        <table class="table table-borderless">
+        <colgroup>
+            <col width="10%" />
+            <col/>
+        </colgroup>
+        <tr>
+            <th>Created by</th>
+            <td>{{ torrent.t_created_by }}</td>
+        </tr>
+        <tr>
+            <th>Creation date</th>
+            <td class="date-full">{{ torrent.t_creation_date }}</td>
+        </tr>
+        <tr>
+            <th>Comment</th>
+            <td>{{ torrent.t_comment }}</td>
+        </tr>
+        <tr>
+            <th>Announce</th>
+            <td>{{ torrent.t_announce }}</td>
+        </tr>
+        </table>
+    {% endif %}
+
+    <hr>
+    <h2>File list</h2>
+    {% if not torrent.is_sqlite_import %}
+        <a href="{{ url_for('api.filelist', torrent_id=torrent.id) }}"
+           class="btn btn-default" data-toggle="file-list"
+           data-target="#file-list">Show file list</a>
+        <table id="file-list" class="table table-striped table-condensed hidden">
+            <colgroup>
+                <col width="100%" />
+                <col width="100" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Path</th>
+                    <th>Size</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Path</th>
+                    <th>Size</th>
+                </tr>
+            </tfoot>
+            <tbody></tbody>
+        </table>
+    {% else %}
+        <div class="text-center">
+            <em>No data available</em>
+        </div>
+    {% endif %}
+
+    {% if torrent.comments %}
+        <hr>
+        <h2>Comments</h2>
+
+
+        {% for comment in torrent.comments %}
+            <div class="comment" id="c{{ comment.id }}">
+                <div class="author">
+                    <strong>{{ comment.user.name }}</strong>
+                </div>
+                <div class="datetime">
+                    <time datetime="{{ comment.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
+                        <em>{{ comment.date.strftime('%Y-%m-%d %H:%M%z') }}</em>
+                    </time>
+                </div>
+                <div class="text">{{ comment.text|safe }}</div>
+            </div>
+            <hr>
+        {% endfor %}
+    {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% import "macros/pagination.html" as p %}
+
+{% block title %}Home{% endblock %}
+{% block container_class %}cont-home{% endblock %}
+
+{% block content %}
+    <div class="blockBody">
+        <nav class="torrentNav" aria-label="Page navigation">
+            {{ p.render(torrents_pagination) }}
+        </nav>
+
+        <div class="table-responsive">
+            <table class="table custom-table-hover">
+                <tr>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Size</th>
+                    <th>Links</th>
+                </tr>
+                {% for torrent in torrents_pagination.items %}
+                    <tr class="torrent-info {{ torrent.status.css_class }}">
+                        <td>
+                            <a href="{{ url_for('main.search', c=torrent.cat_url_param) }}">
+                                <img
+                                    src="{{ url_for('static', filename=torrent.sub_category.image_url) }}">
+                            </a>
+                        </td>
+                        <td class="name">
+                            <a href="{{ url_for('main.torrent_view', torrent_id=torrent.id) }}">
+                                {{ torrent.name }}
+                            </a>
+                        </td>
+                        <td class="date date-short">{{ torrent.date.strftime('%Y-%m-%d') }}</td>
+                        <td class="filesize">{{ torrent.filesize|pretty_size }}</td>
+                        <td>
+                            <a href="{{ torrent.magnet }}" title="Magnet link">
+                                <span class="glyphicon glyphicon-magnet" aria-hidden="true"></span>
+                            </a>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <nav class="torrentNav" aria-label="Page navigation">
+            {{ p.render(torrents_pagination) }}
+        </nav>
+    </div>
+{% endblock %}
