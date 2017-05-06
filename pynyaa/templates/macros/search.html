@@ -1,5 +1,5 @@
 {% macro search_common(search) %}
-    <select name="c" class="form-control input-sm">
+    <select name="category" class="form-control input-sm">
         <option value="_">All categories</option>
         <option value="3_" {% if search.category == '3_' %}selected{% endif %}>Anime</option>
         <option value="3_12" {% if search.category == '3_12' %}selected{% endif %}>Anime - Anime MusicVideo</option>
@@ -25,7 +25,7 @@
         <option value="1_1" {% if search.category == '1_1' %}selected{% endif %}>Software - Applications</option>
         <option value="1_2" {% if search.category == '1_2' %}selected{% endif %}>Software - Games</option>
     </select>
-    <select name="s" class="form-control input-sm">
+    <select name="status" class="form-control input-sm">
         <option value="">Show all</option>
         <option value="2" {% if search.status == '2' %}selected{% endif %}>Filter Remakes</option>
         <option value="3" {% if search.status == '3' %}selected{% endif %}>Trusted</option>
@@ -45,27 +45,27 @@
         <option value="asc" {% if search.order == 'asc' %}selected{% endif %}>Ascending</option>
     </select>
     <select name="max" class="form-control input-sm">
-        <option value="5" {% if search.maxperpage == 5 %}selected{% endif %}>5</option>
-        <option value="10" {% if search.maxperpage == 10 %}selected{% endif %}>10</option>
-        <option value="15" {% if search.maxperpage == 15 %}selected{% endif %}>15</option>
-        <option value="20" {% if search.maxperpage == 20 %}selected{% endif %}>20</option>
-        <option value="25" {% if search.maxperpage == 25 %}selected{% endif %}>25</option>
-        <option value="30" {% if search.maxperpage == 30 %}selected{% endif %}>30</option>
-        <option value="35" {% if search.maxperpage == 35 %}selected{% endif %}>35</option>
-        <option value="40" {% if search.maxperpage == 40 %}selected{% endif %}>40</option>
-        <option value="45" {% if search.maxperpage == 45 %}selected{% endif %}>45</option>
-        <option value="50" {% if search.maxperpage == 50 %}selected{% endif %}>50</option>
-        <option value="70" {% if search.maxperpage == 70 %}selected{% endif %}>70</option>
-        <option value="100" {% if search.maxperpage == 100 %}selected{% endif %}>100</option>
-        <option value="150" {% if search.maxperpage == 150 %}selected{% endif %}>150</option>
-        <option value="200" {% if search.maxperpage == 200 %}selected{% endif %}>200</option>
-        <option value="300" {% if search.maxperpage == 300 %}selected{% endif %}>300</option>
+        <option value="5" {% if search.max == 5 %}selected{% endif %}>5</option>
+        <option value="10" {% if search.max == 10 %}selected{% endif %}>10</option>
+        <option value="15" {% if search.max == 15 %}selected{% endif %}>15</option>
+        <option value="20" {% if search.max == 20 %}selected{% endif %}>20</option>
+        <option value="25" {% if search.max == 25 %}selected{% endif %}>25</option>
+        <option value="30" {% if search.max == 30 %}selected{% endif %}>30</option>
+        <option value="35" {% if search.max == 35 %}selected{% endif %}>35</option>
+        <option value="40" {% if search.max == 40 %}selected{% endif %}>40</option>
+        <option value="45" {% if search.max == 45 %}selected{% endif %}>45</option>
+        <option value="50" {% if search.max == 50 %}selected{% endif %}>50</option>
+        <option value="70" {% if search.max == 70 %}selected{% endif %}>70</option>
+        <option value="100" {% if search.max == 100 %}selected{% endif %}>100</option>
+        <option value="150" {% if search.max == 150 %}selected{% endif %}>150</option>
+        <option value="200" {% if search.max == 200 %}selected{% endif %}>200</option>
+        <option value="300" {% if search.max == 300 %}selected{% endif %}>300</option>
     </select>
 {% endmacro %}
 
 {% macro search_button(search) %}
     <div class="input-group">
-        <input name="q" class="form-control input-sm" placeholder="Search" type="text"
+        <input name="query" class="form-control input-sm" placeholder="Search" type="text"
                value="{{ search.query }}">
         <span class="input-group-btn">
           <button type="submit" class="btn btn-sm btn-success">

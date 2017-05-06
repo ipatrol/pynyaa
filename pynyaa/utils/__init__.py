@@ -2,6 +2,7 @@
 import math
 
 from flask import request, url_for
+from markupsafe import Markup
 
 
 def pretty_size(size):
@@ -17,3 +18,8 @@ def url_for_other_page(page):
     args = request.view_args.copy()
     args['page'] = page
     return url_for(request.endpoint, **args)
+
+
+def cdatasafe(text):
+    text = text.replace(']]>', '')
+    return Markup(text)

@@ -1,5 +1,5 @@
 
-from flask import Blueprint, render_template, abort, request
+from flask import Blueprint, render_template, abort, request, Response
 
 from .. import models, db
 
@@ -10,6 +10,7 @@ main = Blueprint('main', __name__)
 @main.route('/page/<int:page>')
 @main.route('/search', endpoint='search')
 @main.route('/search/<int:page>', endpoint='search')
+@main.route('/feed.xml', endpoint='feed')
 def home(page=1):
     query = models.Torrent.query\
         .options(
@@ -18,11 +19,9 @@ def home(page=1):
             db.joinedload(models.Torrent.status),
         )
 
-    # c=_&s=&sort=torrent_id&order=desc&max=5&q=
     map_long_names = dict(
         c='category',
         s='status',
-        max='maxperpage',
         q='query',
     )
     search = dict(
@@ -30,22 +29,22 @@ def home(page=1):
         status='',
         sort='',
         order='',
-        maxperpage='',
+        max='',
         query='',
     )
     for key in request.args:
-        if key in ('c', 's', 'sort', 'order', 'max', 'q'):
+        if key in ('c', 'category', 's', 'status', 'sort', 'order', 'max', 'q', 'query'):
             search[map_long_names.get(key, key)] = request.args.get(key)
 
-    if 'maxperpage' not in search:
-        search['maxperpage'] = 50
+    if 'max' not in search:
+        search['max'] = 50
 
     try:
-        search['maxperpage'] = int(search['maxperpage'])
+        search['max'] = int(search['max'])
     except ValueError:
-        search['maxperpage'] = 50
+        search['max'] = 50
 
-    search['maxperpage'] = min(300, max(5, search['maxperpage']))
+    search['max'] = min(300, max(5, search['max']))
 
     if search['category'] and '_' in search['category']:
         cat, subcat = search['category'].split('_', 1)
@@ -74,8 +73,13 @@ def home(page=1):
     sort_and_ordering = getattr(sort_column, ordering)()
     query = query.order_by(sort_and_ordering)
 
-    pagination = query.paginate(page=page, per_page=search['maxperpage'])
-    return render_template('home.html', search=search, torrents_pagination=pagination)
+    pagination = query.paginate(page=page, per_page=search['max'])
+    if request.endpoint == 'main.feed':
+        return Response(
+            render_template('feed.xml', search=search, torrents_pagination=pagination),
+            mimetype='application/xml')
+    else:
+        return render_template('home.html', search=search, torrents_pagination=pagination)
 
 
 @main.route('/api/<int:page>')
@@ -90,12 +94,7 @@ def api_view(torrent_id):
 
 @main.route('/faq')
 def faq():
-    pass
-
-
-@main.route('/feed.xml')
-def feed():
-    pass
+    return render_template('faq.html', search={})
 
 
 @main.route('/view/<int:torrent_id>')
@@ -103,4 +102,4 @@ def torrent_view(torrent_id):
     torrent = models.Torrent.query.filter_by(id=torrent_id).first()
     if torrent is None:
         return abort(404)
-    return render_template('view.html', torrent=torrent)
+    return render_template('view.html', search={}, torrent=torrent)

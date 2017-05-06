@@ -27,4 +27,5 @@ def init_blueprints(app: Flask):
 def init_jinja_env(app: Flask):
     from . import utils
     app.jinja_env.filters['pretty_size'] = utils.pretty_size
+    app.jinja_env.filters['cdatasafe'] = utils.cdatasafe
     app.jinja_env.globals['url_for_other_page'] = utils.url_for_other_page
