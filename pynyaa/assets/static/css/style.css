@@ -152,3 +152,15 @@ div.container div.blockBody:nth-of-type(2) table tr:first-of-type th:last-of-typ
         border: none;
     }
 }
+
+.advanced-search {
+    text-align: center;
+}
+.advanced-search .heading {
+    font-size: 2em;
+}
+
+.pagination {
+    margin-top: 13px;
+    margin-bottom: 13px;
+}

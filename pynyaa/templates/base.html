@@ -34,6 +34,7 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main.upload') }}">Upload</a></li>
                 <li><a href="{{ url_for('main.faq') }}">FAQ</a></li>
                 <li><a href="irc://irc.rizon.net/tonari.">IRC</a></li>
                 <li><a href="{{ url_for('main.feed', **search) }}">Feed</a></li>
@@ -51,9 +52,9 @@
 <!-- top padding -->
 <div style="padding-top: 10rem"></div>
 
-<div class="container {% block container_class %}cont-home{% endblock %}" id="container">
-    <div class="blockBody" style="text-align:center">
-        <font size="4.5">Advanced Search</font><br/>
+<div class="container {% block container_class %}{% endblock %}" id="container">
+    <div class="advanced-search">
+        <div class="heading">Advanced Search</div>
         <form class="navbar-form" role="search" action="{{ url_for('main.search') }}" method="get">
             <div class="form-group">
                 {{ s.search_common(search) }}
@@ -61,9 +62,7 @@
                 {{ s.search_button(search) }}
             </div>
         </form>
-        <div style="clear:both"></div>
     </div>
-    <div style="margin:0.5em"></div>
     {% block content %}Nothing Here.{% endblock %}
 </div>
 
