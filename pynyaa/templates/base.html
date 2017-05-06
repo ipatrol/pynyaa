@@ -44,7 +44,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('main.faq') }}">FAQ</a></li>
                 <li><a href="irc://irc.rizon.net/tonari.">IRC</a></li>
-                <li><a href="{{ url_for('main.feed', **search) }}">Feed</a></li>
+                <li><a href="{{ url_for('main.feed', **(search or {})) }}">Feed</a></li>
             </ul>
             <form class="navbar-form navbar-right" role="search" action="{{ url_for('main.search') }}" method="get">
                 <div class="form-group">

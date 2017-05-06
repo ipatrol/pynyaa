@@ -94,7 +94,7 @@ def api_view(torrent_id):
 
 @main.route('/faq')
 def faq():
-    return render_template('faq.html', search={})
+    return render_template('faq.html')
 
 
 @main.route('/view/<int:torrent_id>')
@@ -102,4 +102,4 @@ def torrent_view(torrent_id):
     torrent = models.Torrent.query.filter_by(id=torrent_id).first()
     if torrent is None:
         return abort(404)
-    return render_template('view.html', search={}, torrent=torrent)
+    return render_template('view.html', torrent=torrent)
