@@ -54,6 +54,12 @@ ROOT_URLCONF = 'nyaa.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [os.path.join(BASE_DIR, 'pynyaa/templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {'environment': 'nyaa.jinja2.Environment',}, 
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ["nyaa_django/templates"],
         'APP_DIRS': True,
