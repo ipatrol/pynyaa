@@ -51,7 +51,7 @@
 <!-- top padding -->
 <div style="padding-top: 10rem"></div>
 
-<div class="container" id="container">
+<div class="container {% block container_class %}cont-home{% endblock %}" id="container">
     <div class="blockBody" style="text-align:center">
         <font size="4.5">Advanced Search</font><br/>
         <form class="navbar-form" role="search" action="{{ url_for('main.search') }}" method="get">
