@@ -35,25 +35,26 @@
                 <td>{{ torrent.description|safe }}</td>
             </tr>
         </table>
-        <hr>
-        <h2>Comments</h2>
-
-
-        {% for comment in torrent.comments %}
-            <div class="comment" id="c{{ comment.id }}">
-                <div class="author">
-                    <strong>{{ comment.user.name }}</strong>
-                </div>
-                <div class="datetime">
-                    <time datetime="{{ comment.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
-                        <em>{{ comment.date.strftime('%Y-%m-%d %H:%M%z') }}</em>
-                    </time>
-                </div>
-                <div class="text">{{ comment.text|safe }}</div>
-            </div>
+        {% if torrent.comments %}
             <hr>
-        {% endfor %}
+            <h2>Comments</h2>
 
+
+            {% for comment in torrent.comments %}
+                <div class="comment" id="c{{ comment.id }}">
+                    <div class="author">
+                        <strong>{{ comment.user.name }}</strong>
+                    </div>
+                    <div class="datetime">
+                        <time datetime="{{ comment.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
+                            <em>{{ comment.date.strftime('%Y-%m-%d %H:%M%z') }}</em>
+                        </time>
+                    </div>
+                    <div class="text">{{ comment.text|safe }}</div>
+                </div>
+                <hr>
+            {% endfor %}
+        {% endif %}
         <hr>
     </div>
 {% endblock %}
