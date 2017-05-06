@@ -80,7 +80,7 @@ def bdecode(data):
     return r
 
 
-class Bencached(object):
+class Bencached:
     __slots__ = ['bencoded']
 
     def __init__(self, s):
@@ -92,7 +92,7 @@ def encode_bencached(x, r):
 
 
 def encode_int(x, r):
-    r.extend((b'i', str(x), b'e'))
+    r.extend((b'i', str(x).encode('utf-8'), b'e'))
 
 
 def encode_bool(x, r):
@@ -103,7 +103,7 @@ def encode_bool(x, r):
 
 
 def encode_string(x, r):
-    r.extend((str(len(x)), b':', x))
+    r.extend((str(len(x)).encode('utf-8'), b':', x))
 
 
 def encode_list(x, r):
@@ -115,10 +115,10 @@ def encode_list(x, r):
 
 def encode_dict(x, r):
     r.append(b'd')
-    ilist = x.items()
+    ilist = list(x.items())
     ilist.sort()
     for k, v in ilist:
-        r.extend((str(len(k)), b':', k))
+        r.extend((str(len(k)).encode('utf-8'), b':', k.encode('utf-8')))
         encode_func[type(v)](v, r)
     r.append(b'e')
 
