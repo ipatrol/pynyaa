@@ -1,4 +1,6 @@
 
+from urllib.parse import quote
+
 from .. import db
 
 
@@ -31,7 +33,8 @@ class Torrent(db.Model):
 
     @property
     def magnet(self):
-        return f'magnet:?xt=urn:sha1:{self.hash.upper()}'
+        return f'magnet:?xt=urn:btih:{self.hash.lower()}' \
+               f'&dn={quote(self.name)}'
 
 
 class Category(db.Model):
