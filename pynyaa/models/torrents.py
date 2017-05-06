@@ -53,7 +53,8 @@ class SubCategory(db.Model):
 
 class Status(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(1024))
+    name = db.Column(db.String(20))
+    label = db.Column(db.String(50))
 
     @property
     def css_class(self):

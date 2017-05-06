@@ -63,8 +63,21 @@ def import_sqlite(path, destination='import'):
 
         for row in cursor.execute('SELECT category_id, category_name FROM categories'):
             db.session.add(models.Category(**dict(zip(('id', 'name'), row))))
+
         for row in cursor.execute('SELECT status_id, status_name FROM statuses'):
-            db.session.add(models.Status(**dict(zip(('id', 'name'), row))))
+            status_dict = dict(zip(('id', 'name'), row))
+            if status_dict['name'] == 'a+':
+                status_dict['name'] = 'aplus'
+
+            status_dict['label'] = dict(
+                normal='Normal',
+                remake='Filter Remakes',
+                trusted='Trusted',
+                aplus='A+',
+            ).get(status_dict['name'], status_dict['name'])
+            status = models.Status(**status_dict)
+            db.session.add(status)
+
         for row in cursor.execute('SELECT sub_category_id, parent_id, sub_category_name '
                                   'FROM sub_categories'):
             db.session.add(models.SubCategory(**dict(zip(('id', 'parent_id', 'name'), row))))
