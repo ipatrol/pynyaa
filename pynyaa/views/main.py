@@ -79,7 +79,13 @@ def faq():
 
 @main.route('/view/<int:torrent_id>')
 def torrent_view(torrent_id):
-    torrent = models.Torrent.query.filter_by(id=torrent_id).first()
+    torrent = models.Torrent.query\
+        .options(
+            db.joinedload(models.Torrent.category),
+            db.joinedload(models.Torrent.sub_category),
+            db.joinedload(models.Torrent.status),
+            db.joinedload(models.Torrent.comments).joinedload(models.Comment.user),
+        ).filter_by(id=torrent_id).first()
     if torrent is None:
         return abort(404)
     return render_template('view.html', torrent=torrent)

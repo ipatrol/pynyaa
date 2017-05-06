@@ -84,3 +84,6 @@ class Comment(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref='comments')
+
+    torrent_id = db.Column(db.Integer, db.ForeignKey('torrent.id'))
+    torrent = db.relationship('Torrent', backref='comments')

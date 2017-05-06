@@ -122,6 +122,7 @@ def import_sqlite(path, destination='import'):
             rowdict['filesize'] = normalize_filesize(rowdict['filesize'])
             rowdict['is_exact'] = False
 
+            comment_list = []
             if rowdict['comments']:
                 try:
                     comments = json.loads(zlib.decompress(rowdict['comments']).decode('utf-8'))
@@ -146,10 +147,11 @@ def import_sqlite(path, destination='import'):
                         id=int(json_comment['id'].lstrip('c')),
                         text=extract_comment(json_comment['c']),
                         av=json_comment['av'],
-                        date=datetime.fromtimestamp(json_comment['t'], pytz.utc)
+                        date=datetime.fromtimestamp(json_comment['t'], pytz.utc),
+                        user_id=json_comment['ui'],
                     )
-                    db.session.add(comment)
-            del rowdict['comments']
+                    comment_list.append(comment)
+            rowdict['comments'] = comment_list
             db.session.add(models.Torrent(**rowdict))
 
             # time already spent
