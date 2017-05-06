@@ -7,15 +7,13 @@ import time
 import zlib
 import json
 
-from flask_script import Manager
 import pytz
+import click
 
 from pynyaa import create_app, db, models
 
 config_file = pathlib.Path('config/development.py')
 app = create_app(config_file.absolute())
-
-manager = Manager(app)
 
 
 def extract_comment(text):
@@ -42,9 +40,9 @@ def normalize_filesize(size):
     return int(size * 1024**suffix_map[suffix])
 
 
-@manager.command
-@manager.option(help='Path to sqlite3 nyaa data dump zip file.')
-@manager.option(help='Desctination of unzipped data dump (default: ./import).')
+@app.cli.command()
+@click.argument('path')
+@click.argument('destination')
 def import_sqlite(path, destination='import'):
     db.drop_all()
     db.create_all()
@@ -61,13 +59,18 @@ def import_sqlite(path, destination='import'):
     with sqlite3.connect(str(sqlite_file)) as conn:
         cursor = conn.cursor()
 
-        # on import, those tables will all have an explicit id specified
-        # for new records (even during import) we reset the sequence counter
-        # beforehand
-        db.engine.execute('ALTER SEQUENCE category_id_seq RESTART WITH 7')
-        db.engine.execute('ALTER SEQUENCE status_id_seq RESTART WITH 5')
-        db.engine.execute('ALTER SEQUENCE sub_category_id_seq RESTART WITH 19')
-        db.engine.execute('ALTER SEQUENCE torrent_id_seq RESTART WITH 923001')
+        cat_id_max, = cursor.execute('SELECT MAX(category_id) FROM categories').fetchone()
+        status_id_max, = cursor.execute('SELECT MAX(status_id) FROM statuses').fetchone()
+        subcat_id_max, = cursor.execute('SELECT MAX(sub_category_id) FROM sub_categories').fetchone()
+        torrent_id_max, = cursor.execute('SELECT MAX(torrent_id) FROM torrents').fetchone()
+
+        # On import, those tables will all have an explicit id specified.
+        # For new records we reset the sequence counter.
+        # We do this before importing to allow inserting of new records during the import.
+        db.engine.execute(f'ALTER SEQUENCE category_id_seq RESTART WITH {cat_id_max+1}')
+        db.engine.execute(f'ALTER SEQUENCE status_id_seq RESTART WITH {status_id_max+1}')
+        db.engine.execute(f'ALTER SEQUENCE sub_category_id_seq RESTART WITH {subcat_id_max+1}')
+        db.engine.execute(f'ALTER SEQUENCE torrent_id_seq RESTART WITH {torrent_id_max+1}')
 
         for row in cursor.execute('SELECT category_id, category_name FROM categories'):
             db.session.add(models.Category(**dict(zip(('id', 'name'), row))))
@@ -181,12 +184,3 @@ def import_sqlite(path, destination='import'):
                 db.session.commit()
 
         db.session.commit()
-
-
-@manager.command
-def run():
-    app.run(host='0.0.0.0')
-
-
-if __name__ == '__main__':
-    manager.run()

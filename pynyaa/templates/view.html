@@ -21,7 +21,11 @@
             </tr>
             <tr>
                 <th>Upload date</th>
-                <td class="date-full">{{ torrent.date }}</td>
+                <td>
+                    <time datetime="{{ torrent.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
+                        {{ torrent.date.strftime('%Y-%m-%d %H:%M%z') }}
+                    </time>
+                </td>
             </tr>
             <tr>
                 <th>Size</th>
@@ -55,7 +59,11 @@
         </tr>
         <tr>
             <th>Creation date</th>
-            <td class="date-full">{{ torrent.t_creation_date }}</td>
+            <td>
+                <time datetime="{{ torrent.t_creation_date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
+                    {{ torrent.t_creation_date.strftime('%Y-%m-%d %H:%M%z') }}
+                </time>
+            </td>
         </tr>
         <tr>
             <th>Comment</th>
@@ -110,9 +118,11 @@
                     <strong>{{ comment.user.name }}</strong>
                 </div>
                 <div class="datetime">
-                    <time datetime="{{ comment.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
-                        <em>{{ comment.date.strftime('%Y-%m-%d %H:%M%z') }}</em>
-                    </time>
+                    <em>
+                        <time datetime="{{ comment.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
+                            {{ comment.date.strftime('%Y-%m-%d %H:%M%z') }}
+                        </time>
+                    </em>
                 </div>
                 <div class="text">{{ comment.text|safe }}</div>
             </div>

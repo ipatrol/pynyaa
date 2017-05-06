@@ -12,6 +12,13 @@
 
         <div class="table-responsive">
             <table class="table custom-table-hover">
+                <colgroup>
+                    <col width="9%">
+                    <col width="70%">
+                    <col width="8%">
+                    <col width="8%">
+                    <col width="5%">
+                </colgroup>
                 <tr>
                     <th>Category</th>
                     <th>Name</th>
@@ -32,7 +39,11 @@
                                 {{ torrent.name }}
                             </a>
                         </td>
-                        <td class="date date-short">{{ torrent.date.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            <time class="date-only" datetime="{{ torrent.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
+                                {{ torrent.date.strftime('%Y-%m-%d') }}
+                            </time>
+                        </td>
                         <td class="filesize">{{ torrent.filesize|pretty_size }}</td>
                         <td>
                             <a href="{{ torrent.magnet }}" title="Magnet link">

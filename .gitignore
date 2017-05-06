@@ -208,6 +208,7 @@ pip-selfcheck.json
 
 
 .idea/
+.venv/
 .py[od]
 __pycache__/
 

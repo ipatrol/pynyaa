@@ -5,8 +5,9 @@
         return $('#preload-section').find('.spin').clone();
     }
 
-    // load file list
     $(document).ready(function(){
+
+        // load file list
         $('[data-toggle="file-list"]').on('click', function(event){
             event.preventDefault();
             var $table = $($(this).data('target'));
@@ -60,7 +61,18 @@
                     $tbody.append($('<tr><td>Error retrieving file list.</td></tr>'));
                 }
             });
+        });
 
+        // convert <time> tags content to local time string
+        $('time[datetime]').each(function(i, time) {
+            var $time = $(time);
+            var datetime = $time.attr('datetime');
+            var date = new Date($time.attr('datetime'));
+            if ($time.hasClass('date-only')) {
+                $time.text(date.toLocaleDateString());
+            } else {
+                $time.text(date.toLocaleString());
+            }
         });
     });
 
