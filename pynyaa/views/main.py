@@ -19,6 +19,12 @@ def home(page=1):
             db.joinedload(models.Torrent.status),
         )
 
+    # no point in listing torrents that don't have hashes
+    query = query.filter(db.and_(
+        models.Torrent.hash.isnot(None),
+        models.Torrent.hash != ''
+    ))
+
     search = g.search
     if search['category'] and '_' in search['category']:
         cat, subcat = search['category'].split('_', 1)
