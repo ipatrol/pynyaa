@@ -12,6 +12,13 @@
 
         <div class="table-responsive">
             <table class="table custom-table-hover">
+                <colgroup>
+                    <col width="9%">
+                    <col width="70%">
+                    <col width="8%">
+                    <col width="8%">
+                    <col width="5%">
+                </colgroup>
                 <tr>
                     <th>Category</th>
                     <th>Name</th>
@@ -33,7 +40,7 @@
                             </a>
                         </td>
                         <td>
-                            <time datetime="{{ torrent.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
+                            <time class="date-only" datetime="{{ torrent.date.strftime('%Y-%m-%dT%H:%M:%S%z') }}">
                                 {{ torrent.date.strftime('%Y-%m-%d') }}
                             </time>
                         </td>

@@ -68,7 +68,11 @@
             var $time = $(time);
             var datetime = $time.attr('datetime');
             var date = new Date($time.attr('datetime'));
-            $time.text(date.toLocaleString());
+            if ($time.hasClass('date-only')) {
+                $time.text(date.toLocaleDateString());
+            } else {
+                $time.text(date.toLocaleString());
+            }
         });
     });
 
