@@ -2,7 +2,10 @@
 import hashlib
 from datetime import datetime
 
-from flask import Blueprint, render_template, abort, request, Response, g, redirect, url_for
+from flask import (
+    Blueprint, render_template, abort, request, Response, g, redirect, url_for,
+    jsonify
+)
 import pytz
 
 from .. import models, db, forms
@@ -72,16 +75,6 @@ def home(page=1):
             mimetype='application/xml')
     else:
         return render_template('home.html', torrents_pagination=pagination)
-
-
-@main.route('/api/<int:page>')
-def api(page):
-    pass
-
-
-@main.route('/api/view/<int:torrent_id>')
-def api_view(torrent_id):
-    pass
 
 
 @main.route('/faq')

@@ -9,6 +9,8 @@ class Torrent(db.Model):
     name = db.Column(db.String(1024), nullable=False)
     hash = db.Column(db.String(40), index=True, nullable=False)
 
+    is_sqlite_import = db.Column(db.Boolean, default=False)
+
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship('Category', backref='torrents')
 
@@ -22,7 +24,6 @@ class Torrent(db.Model):
     downloads = db.Column(db.Integer, index=True)
     stardom = db.Column(db.Integer, index=True)
     filesize = db.Column(db.BigInteger, index=True)
-    is_exact = db.Column(db.Boolean)
 
     description = db.Column(db.Text)
     website_link = db.Column(db.String(1024))

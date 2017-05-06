@@ -133,7 +133,7 @@ def import_sqlite(path, destination='import'):
                 except Exception as exc:
                     rowdict['description'] = ''
 
-            rowdict['is_exact'] = False
+            rowdict['is_sqlite_import'] = True
 
             comment_list = []
             if rowdict['comments']:

@@ -164,3 +164,39 @@ div.container div.blockBody:nth-of-type(2) table tr:first-of-type th:last-of-typ
     margin-top: 13px;
     margin-bottom: 13px;
 }
+
+#preload-section {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+}
+
+.spin img {
+    display: block;
+    margin: 0 auto;
+    height: 100px;
+    width: auto;
+}
+
+.file-list .file {
+    margin: 0 -15px;
+}
+.file-list .file:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.file-list .file .file-size,
+.file-list .file .file-path {
+    padding: 0 15px;
+    float: left;
+}
+
+.file-list .file .file-size {
+    width: 100px;
+}
+.file-list .file .file-path {
+
+}

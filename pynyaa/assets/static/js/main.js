@@ -1,79 +1,67 @@
-var pathArray = window.location.pathname.split('/');
-var query = window.location.search;
-var page = parseInt(pathArray[2]);
-var pageString = "/page/";
 
-var next = page + 1;
-var prev = page - 1;
+(function($){
 
-if (prev < 1) {
-    prev = 1;
-}
-
-if (isNaN(page)) {
-    next = 2;
-    prev = 1;
-}
-
-if (query !== "") {
-    pageString = "/search/";
-}
-
-var list, i, e;
-var maxId = 5;
-for (i = 0; i < maxId; i++) {
-    var el = document.getElementById('page-' + i), n = prev + i;
-    if (el === null) {
-        continue;
+    function getSpinning() {
+        return $('#preload-section').find('.spin').clone();
     }
-    el.href = pageString + n + query;
-    el.innerHTML = n;
-}
 
-e = document.getElementById('page-next');
-if (e !== null) {
-    e.href = pageString + next + query;
-}
-e = document.getElementById('page-prev');
-if (e !== null) {
-    e.href = pageString + prev + query;
-}
+    // load file list
+    $(document).ready(function(){
+        $('[data-toggle="file-list"]').on('click', function(event){
+            event.preventDefault();
+            var $table = $($(this).data('target'));
+            var $tbody = $table.find('tbody');
+            if ($tbody.length === 0) {
+                console.warn('File list target container not found.');
+                return;
+            }
+            $tbody.removeClass('text-danger');
+            var href = $(this).attr('href');
+            if (typeof href === 'undefined') {
+                console.warn('No api url found.');
+                return;
+            }
+            $(this).addClass('disabled');
+            $table.removeClass('hidden');
+            $tbody.html('');
 
-// Used by spoiler tags
-function toggleLayer(elem) {
-    if (elem.classList.contains("hide")) {
-        elem.classList.remove("hide");
-    } else {
-        elem.classList.add("hide");
-    }
-}
+            var $spin = $('<tr></tr><tr><td colspan="2"></td></tr>');
+            $spin.find('td').append(getSpinning());
+            $tbody.append($spin);
 
-function formatDate(date) { // thanks stackoverflow
-    var monthNames = [
-        "January", "February", "March",
-        "April", "May", "June", "July",
-        "August", "September", "October",
-        "November", "December"
-    ];
+            $.ajax({
+                url: href,
+                method: 'GET',
+                dataType: 'json',
+                success: function(data, textStatus, jqXHR) {
+                    $tbody.html('');
+                    if (!data || !data.files) {
+                        $tbody.addClass('text-danger');
+                        $tbody.append($('<tr><td>Unexpected data returned.</td></tr>'));
+                        return;
+                    }
+                    $.each(data.files, function(i, file) {
+                        var $file = $('<tr></tr>');
+                        var $path = $('<td class="file-path"></td>');
+                        var $size = $('<td class="file-size"></td>');
+                        $file.append($path);
+                        $file.append($size);
 
-    var day = date.getDate();
-    var monthIndex = date.getMonth();
-    var year = date.getFullYear();
+                        $path.text(file.path);
+                        $size.text(file.pretty_size);
+                        $size.attr('data-filesize', file.size);
 
-    return day + ' ' + monthNames[monthIndex] + ' ' + year;
-}
+                        $tbody.append($file);
+                    });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    $tbody.html('');
+                    $tbody.addClass('text-danger');
+                    $tbody.append($('<tr><td>Error retrieving file list.</td></tr>'));
+                }
+            });
 
-list = document.getElementsByClassName("date-short");
-for (i in list) {
-    e = list[i];
-    e.title = e.innerText;
-    e.innerText = formatDate(new Date(e.innerText));
-}
+        });
+    });
 
-list = document.getElementsByClassName("date-full");
-for (i in list) {
-    e = list[i];
-    e.title = e.innerText;
-    var date = new Date(e.innerText);
-    e.innerText = date.toDateString() + " " + date.toLocaleTimeString();
-}
+})(jQuery);

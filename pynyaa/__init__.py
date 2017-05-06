@@ -25,6 +25,7 @@ def create_app(config: str) -> Flask:
 def init_blueprints(app: Flask):
     from . import views
     app.register_blueprint(views.main)
+    app.register_blueprint(views.api, url_prefix='/api/v1')
 
 
 def init_jinja_env(app: Flask):
