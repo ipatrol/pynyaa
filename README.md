@@ -15,8 +15,14 @@ $ git clone https://github.com/nitori/pynyaa
 $ cd pynyaa
 $ python3.6 -m venv ./.venv
 $ . ./.venv/bin/activate
+```
+
+Install dependencies
+
+```bash
 $ pip install -U pip
 $ pip install pip-tools
+$ pip-compile
 $ pip-sync
 ```
 
@@ -27,5 +33,6 @@ More details on:
 
 
 ```bash
-$ python manage.py run
+$ FLASK_APP=manage.py
+$ flask run
 ```

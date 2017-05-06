@@ -7,15 +7,13 @@ import time
 import zlib
 import json
 
-from flask_script import Manager
 import pytz
+import click
 
 from pynyaa import create_app, db, models
 
 config_file = pathlib.Path('config/development.py')
 app = create_app(config_file.absolute())
-
-manager = Manager(app)
 
 
 def extract_comment(text):
@@ -42,9 +40,9 @@ def normalize_filesize(size):
     return int(size * 1024**suffix_map[suffix])
 
 
-@manager.command
-@manager.option(help='Path to sqlite3 nyaa data dump zip file.')
-@manager.option(help='Desctination of unzipped data dump (default: ./import).')
+@app.cli.command()
+@click.argument('path')
+@click.argument('destination')
 def import_sqlite(path, destination='import'):
     db.drop_all()
     db.create_all()
@@ -186,12 +184,3 @@ def import_sqlite(path, destination='import'):
                 db.session.commit()
 
         db.session.commit()
-
-
-@manager.command
-def run():
-    app.run(host='0.0.0.0')
-
-
-if __name__ == '__main__':
-    manager.run()

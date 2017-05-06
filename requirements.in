@@ -1,6 +1,5 @@
 Flask
 Flask-SQLAlchemy
-Flask-Script
 Flask-Wtf
 psycopg2
 pytz
