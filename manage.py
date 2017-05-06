@@ -61,6 +61,14 @@ def import_sqlite(path, destination='import'):
     with sqlite3.connect(str(sqlite_file)) as conn:
         cursor = conn.cursor()
 
+        # on import, those tables will all have an explicit id specified
+        # for new records (even during import) we reset the sequence counter
+        # beforehand
+        db.engine.execute('ALTER SEQUENCE category_id_seq RESTART WITH 7')
+        db.engine.execute('ALTER SEQUENCE status_id_seq RESTART WITH 5')
+        db.engine.execute('ALTER SEQUENCE sub_category_id_seq RESTART WITH 19')
+        db.engine.execute('ALTER SEQUENCE torrent_id_seq RESTART WITH 923001')
+
         for row in cursor.execute('SELECT category_id, category_name FROM categories'):
             db.session.add(models.Category(**dict(zip(('id', 'name'), row))))
 
@@ -99,19 +107,25 @@ def import_sqlite(path, destination='import'):
         for torrent_number, row in enumerate(
                 cursor.execute(f'SELECT {",".join(tbl_fields)} FROM torrents'),
                 start=1):
-
             rowdict = dict(zip(fields, row))
-            if rowdict['date'] is None:
-                rowdict['date'] = int(time.time())
-            rowdict['date'] = datetime.fromtimestamp(rowdict['date'], pytz.utc)
+
+            if not rowdict['name']:
+                continue
+
+            rowdict['filesize'] = normalize_filesize(rowdict['filesize'])
+            if rowdict['filesize'] == 0:
+                continue
 
             if isinstance(rowdict['hash'], bytes):
                 rowdict['hash'] = rowdict['hash'].decode('ascii')
+            if rowdict['hash'] is None or len(rowdict['hash']) != 40:
+                continue
 
-            if rowdict['hash'] is not None and len(rowdict['hash']) == 40:
-                rowdict['hash'] = str(rowdict['hash']).lower()
-            else:
-                rowdict['hash'] = ''
+            rowdict['hash'] = str(rowdict['hash']).lower()
+
+            if rowdict['date'] is None:
+                rowdict['date'] = int(time.time())
+            rowdict['date'] = datetime.fromtimestamp(rowdict['date'], pytz.utc)
 
             if rowdict['description']:
                 try:
@@ -119,7 +133,6 @@ def import_sqlite(path, destination='import'):
                 except Exception as exc:
                     rowdict['description'] = ''
 
-            rowdict['filesize'] = normalize_filesize(rowdict['filesize'])
             rowdict['is_exact'] = False
 
             comment_list = []

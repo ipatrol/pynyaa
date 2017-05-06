@@ -6,8 +6,8 @@ from .. import db
 
 class Torrent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(1024))
-    hash = db.Column(db.String(40), index=True)
+    name = db.Column(db.String(1024), nullable=False)
+    hash = db.Column(db.String(40), index=True, nullable=False)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     category = db.relationship('Category', backref='torrents')
@@ -26,6 +26,12 @@ class Torrent(db.Model):
 
     description = db.Column(db.Text)
     website_link = db.Column(db.String(1024))
+
+    t_creation_date = db.Column(db.DateTime(True))
+    t_created_by = db.Column(db.String(255))
+    t_comment = db.Column(db.Text)
+    t_announce = db.Column(db.Text)
+    files = db.relationship('File', backref='torrent')
 
     @property
     def cat_url_param(self):
@@ -90,3 +96,9 @@ class Comment(db.Model):
 
     torrent_id = db.Column(db.Integer, db.ForeignKey('torrent.id'))
     torrent = db.relationship('Torrent', backref='comments')
+
+
+class File(db.Model):
+    path = db.Column(db.String(1024), primary_key=True)
+    torrent_id = db.Column(db.Integer, db.ForeignKey('torrent.id'), primary_key=True)
+    size = db.Column(db.Integer)

@@ -103,6 +103,8 @@ def encode_bool(x, r):
 
 
 def encode_string(x, r):
+    if isinstance(x, str):
+        x = x.encode('utf-8')
     r.extend((str(len(x)).encode('utf-8'), b':', x))
 
 
@@ -127,6 +129,7 @@ encode_func = {
     Bencached: encode_bencached,
     int: encode_int,
     bytes: encode_string,
+    str: encode_string,
     list: encode_list,
     tuple: encode_list,
     dict: encode_dict,

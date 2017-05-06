@@ -4,7 +4,7 @@ import math
 from flask import request, url_for, current_app, g
 from markupsafe import Markup
 
-from .. import models
+from . import bencode
 
 
 def pretty_size(size):
@@ -58,3 +58,21 @@ def inject_search_data():
 
     current_app.jinja_env.globals['search'] = search
     g.search = search
+
+
+def decode_torrent(data):
+    torrent = bencode.bdecode(data)
+    return _decode_unicode(torrent)
+
+
+def _decode_unicode(value):
+    if isinstance(value, bytes):
+        value = value.decode('utf-8')
+    elif isinstance(value, dict):
+        for key in value:
+            if key != 'pieces':
+                value[key] = _decode_unicode(value[key])
+    elif isinstance(value, list):
+        for i, item in enumerate(value):
+            value[i] = _decode_unicode(item)
+    return value

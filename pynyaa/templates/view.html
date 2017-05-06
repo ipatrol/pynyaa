@@ -3,39 +3,81 @@
 {% block container_class %}cont-view{% endblock %}
 
 {% block content %}
-
     <div class="blockBody">
         <hr>
         <table class="table table-borderless">
+            <colgroup>
+                <col width="10%" />
+                <col/>
+            </colgroup>
             <tr class="{{ torrent.status.css_class }}"></tr>
             <tr>
-                <td>Name</td>
+                <th>Name</th>
                 <td>{{ torrent.name }}</td>
             </tr>
             <tr>
-                <td>Hash</td>
+                <th>Hash</th>
                 <td>{{ torrent.hash }}</td>
             </tr>
             <tr>
-                <td>Date</td>
+                <th>Upload date</th>
                 <td class="date-full">{{ torrent.date }}</td>
             </tr>
             <tr>
-                <td>Size</td>
+                <th>Size</th>
                 <td>{{ torrent.filesize|pretty_size }}</td>
             </tr>
             <tr>
-                <td>Links</td>
+                <th>Links</th>
                 <td><a aria-label="Magnet Button" href="{{ torrent.magnet }}" type="button"
                        class="btn btn-success download-btn">
-                    <span class="glyphicon glyphicon-magnet" aria-hidden="true"></span> Download!</a>
+                    <span class="glyphicon glyphicon-magnet" aria-hidden="true"></span>
+                    Download!</a>
                 </td>
             </tr>
             <tr>
-                <td>Description</td>
-                <td>{{ torrent.description|safe }}</td>
+                <th>Description</th>
+                <td>{{ torrent.description }}</td>
             </tr>
         </table>
+    {% if torrent.is_exact %}
+        <table class="table table-borderless">
+        <colgroup>
+            <col width="10%" />
+            <col/>
+        </colgroup>
+        <tr>
+            <th>Created by</th>
+            <td>{{ torrent.t_created_by }}</td>
+        </tr>
+        <tr>
+            <th>Creation date</th>
+            <td class="date-full">{{ torrent.t_creation_date }}</td>
+        </tr>
+        <tr>
+            <th>Comment</th>
+            <td>{{ torrent.t_comment }}</td>
+        </tr>
+        <tr>
+            <th>Announce</th>
+            <td>{{ torrent.t_announce }}</td>
+        </tr>
+        <tr>
+            <th>File List</th>
+            <td>
+                {% for file in torrent.files %}
+                <div>
+                    {{ file.size|pretty_size }}
+                    -
+                    {{ file.path }}
+                </div>
+                {% endfor %}
+            </td>
+        </tr>
+
+        </table>
+    {% endif %}
+
         {% if torrent.comments %}
             <hr>
             <h2>Comments</h2>

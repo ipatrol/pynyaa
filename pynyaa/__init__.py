@@ -2,9 +2,10 @@
 from flask import Flask
 
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_wtf import CSRFProtect
 
 db = SQLAlchemy()
+csrf = CSRFProtect()
 
 
 def create_app(config: str) -> Flask:
@@ -12,6 +13,7 @@ def create_app(config: str) -> Flask:
     app.config.from_pyfile(str(config))
 
     db.init_app(app)
+    csrf.init_app(app)
 
     init_blueprints(app)
     init_jinja_env(app)
