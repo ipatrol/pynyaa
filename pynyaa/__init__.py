@@ -27,6 +27,8 @@ def init_blueprints(app: Flask):
     app.register_blueprint(views.main)
     app.register_blueprint(views.api, url_prefix='/api/v1')
 
+    app.errorhandler(404)(views.errors.page_not_found)
+
 
 def init_jinja_env(app: Flask):
     from . import utils
