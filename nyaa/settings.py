@@ -25,7 +25,7 @@ SECRET_KEY = '(s@mimbsmgac2#836ui%co4yip72c1#((c1%$!2o1)i)(3!86z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['193.219.36.33']
+ALLOWED_HOSTS = ['193.219.36.33','localhost','127.0.0.1']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bigautohack',
     'nyaa_django'
 ]
 
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'nyaa.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR, 'pynyaa/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'pynyaa/templates'),os.path.join(BASE_DIR, 'pynyaa/templates/macros')],
         'APP_DIRS': True,
         'OPTIONS': {'environment': 'nyaa.jinja2.Environment',}, 
     },
@@ -91,8 +92,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'nyaa',
-        'USER': 'deimoz',
-        'PASSWORD': 'sdsd',
+        'USER': 'postgres',
+#        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432',
     }

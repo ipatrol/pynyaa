@@ -7,7 +7,7 @@ from nyaa_django import models
 
 def main(request):
     page = request.GET.get('page', 1)
-    torrents = models.Torrents.objects.all().order_by('-torrent_id')[:20*10]
+    torrents = models.Torrent.objects.all().order_by('-id')[:20*10]
     paginator = Paginator(torrents, 20)
     try:
         torrents = paginator.page(page)
@@ -20,3 +20,6 @@ def main(request):
 
 def index(request):
     return render(request,"home.html")
+
+def search(request):
+    return render(request,"search.html")
