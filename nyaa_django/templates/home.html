@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Secret</title>
-    {% include "cdn.html" %}
-</head>
-<body>
-{% include "navbar.html" %}
-<div style="padding-top: 10rem"></div>
-<div class="blockBody">
+{% extends "base.html" %}
+{% block body %}
     <nav class="torrentNav" aria-label="Page navigation">
         <ul class="pagination">
             <li class="active"><a href="?page=1">1</a></li>
@@ -23,7 +13,7 @@
             <li><a href="?page=9">9</a></li>
             <li><a href="?page=10">10</a></li>
 
-            <li><a id="page-next" href="{{ torrents.next_page_number }}" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+            <li><a id="page-next" href="?page={{ torrents.next_page_number }}" aria-label="Next"><span aria-hidden="true">»</span></a></li>
         </ul>
     </nav>
 
@@ -40,7 +30,7 @@
             {% for item in torrents %}
             <tr class="torrent-info">
                     <td>
-                        <a href="/search?c={{ item.category_id }}_{{ item.sub_category_id }}">
+                        <a href="/home?c={{ item.category_id }}_{{ item.sub_category_id }}">
 {#                            <img src="static//img/torrents/{{ item.category_id }}.png">#}
                             <img src="/static/img/torrents/{{ item.sub_category_id }}.png">
                         </a>
@@ -55,7 +45,7 @@
                     <td class="filesize">{{ item.filesize }}</td>
 
                     <td>
-                        <a href="magnet:?xt=urn:btih:{{ item.torrent_hash }}&dn={{ item.torrent_name|safe }}&tr=udp://zer0day.to:1337/announce&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://explodie.org:6969&tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969&tr=http://tracker.baka-sub.cf/announce"
+                        <a href="{{ item.magnet }}"
                            target="_blank" title="Magnet link">
                             <span class="glyphicon glyphicon-magnet" aria-hidden="true"></span>
                         </a>
@@ -66,7 +56,4 @@
             </tbody>
         </table>
     </div>
-</div>
-<div style="padding-top: 5rem"></div>
-</body>
-</html> 
+{% endblock %}

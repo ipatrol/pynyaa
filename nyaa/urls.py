@@ -21,6 +21,7 @@ from nyaa_django import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^home/',views.main),
-    url(r'^search',views.search),
+    url(r'^search',views.main),
+    url(r'^view/([0-9]+)',views.view),
     url(r'^/',views.index)
 ]

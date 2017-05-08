@@ -1,0 +1,27 @@
+<select name="sort" class="form-control input-sm">
+        <option value="id" {% if sort.sort == 'id' %}selected{% endif %}>ID</option>
+        <option value="name" {% if sort.sort == 'name' %}selected{% endif %}>Name</option>
+        <option value="date" {% if sort.sort == 'date' %}selected{% endif %}>Date</option>
+        <option value="downloads" {% if sort.sort == 'downloads' %}selected{% endif %}>Downloads</option>
+    </select>
+    <select name="order" class="form-control input-sm">
+        <option value="desc" {% if sort.order == 'desc' %}selected{% endif %}>Descending</option>
+        <option value="asc" {% if sort.order == 'asc' %}selected{% endif %}>Ascending</option>
+    </select>
+    <select name="max" class="form-control input-sm">
+        <option value="5" {% if search.max == 5 %}selected{% endif %}>5</option>
+        <option value="10" {% if search.max == 10 %}selected{% endif %}>10</option>
+        <option value="15" {% if search.max == 15 %}selected{% endif %}>15</option>
+        <option value="20" {% if search.max == 20 %}selected{% endif %}>20</option>
+        <option value="25" {% if search.max == 25 %}selected{% endif %}>25</option>
+        <option value="30" {% if search.max == 30 %}selected{% endif %}>30</option>
+        <option value="35" {% if search.max == 35 %}selected{% endif %}>35</option>
+        <option value="40" {% if search.max == 40 %}selected{% endif %}>40</option>
+        <option value="45" {% if search.max == 45 %}selected{% endif %}>45</option>
+        <option value="50" {% if search.max == 50 %}selected{% endif %}>50</option>
+        <option value="70" {% if search.max == 70 %}selected{% endif %}>70</option>
+        <option value="100" {% if search.max == 100 %}selected{% endif %}>100</option>
+        <option value="150" {% if search.max == 150 %}selected{% endif %}>150</option>
+        <option value="200" {% if search.max == 200 %}selected{% endif %}>200</option>
+        <option value="300" {% if search.max == 300 %}selected{% endif %}>300</option>
+    </select>

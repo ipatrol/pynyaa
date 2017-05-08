@@ -1,0 +1,32 @@
+<select name="category" class="form-control input-sm">
+        <option value="_">All categories</option>
+        <option value="3_" {% if search.category == '3_' %}selected{% endif %}>Anime</option>
+        <option value="3_12" {% if search.category == '3_12' %}selected{% endif %}>Anime - Anime MusicVideo</option>
+        <option value="3_5" {% if search.category == '3_5' %}selected{% endif %}>Anime -English-translated</option>
+        <option value="3_13" {% if search.category == '3_13' %}selected{% endif %}>Anime -Non-English-translated</option>
+        <option value="3_6" {% if search.category == '3_6' %}selected{% endif %}>Anime - Raw</option>
+        <option value="2_" {% if search.category == '2_' %}selected{% endif %}>Audio</option>
+        <option value="2_3" {% if search.category == '2_3' %}selected{% endif %}>Audio - Lossless</option>
+        <option value="2_4" {% if search.category == '2_4' %}selected{% endif %}>Audio - Lossy</option>
+        <option value="4_" {% if search.category == '4_' %}selected{% endif %}>Literature</option>
+        <option value="4_7" {% if search.category == '4_7' %}selected{% endif %}>Literature -English-translated</option>
+        <option value="4_8" {% if search.category == '4_8' %}selected{% endif %}>Literature - Raw</option>
+        <option value="4_14" {% if search.category == '4_14' %}selected{% endif %}>Literature -Non-English-translated</option>
+        <option value="5_" {% if search.category == '5_' %}selected{% endif %}>Live Action</option>
+        <option value="5_9" {% if search.category == '5_9' %}selected{% endif %}>Live Action -English-translated</option>
+        <option value="5_10" {% if search.category == '5_10' %}selected{% endif %}>Live Action -Idol/Promotional Video</option>
+        <option value="5_18" {% if search.category == '5_18' %}selected{% endif %}>Live Action -Non-English-translated</option>
+        <option value="5_11" {% if search.category == '5_11' %}selected{% endif %}>Live Action - Raw</option>
+        <option value="6_" {% if search.category == '6_' %}selected{% endif %}>Pictures</option>
+        <option value="6_15" {% if search.category == '6_15' %}selected{% endif %}>Pictures - Graphics</option>
+        <option value="6_16" {% if search.category == '6_16' %}selected{% endif %}>Pictures - Photos</option>
+        <option value="1_" {% if search.category == '1_' %}selected{% endif %}>Software</option>
+        <option value="1_1" {% if search.category == '1_1' %}selected{% endif %}>Software - Applications</option>
+        <option value="1_2" {% if search.category == '1_2' %}selected{% endif %}>Software - Games</option>
+    </select>
+    <select name="status" class="form-control input-sm">
+        <option value="">Show all</option>
+        <option value="2" {% if search.status == '2' %}selected{% endif %}>Filter Remakes</option>
+        <option value="3" {% if search.status == '3' %}selected{% endif %}>Trusted</option>
+        <option value="4" {% if search.status == '4' %}selected{% endif %}>A+</option>
+    </select>

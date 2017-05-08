@@ -10,7 +10,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.contrib.postgres.fields import ArrayField
 
 class Category(models.Model):
     name = models.CharField(max_length=1024, blank=True, null=True)
@@ -24,23 +24,13 @@ class Comment(models.Model):
     text = models.TextField(blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
     av = models.CharField(max_length=255, blank=True, null=True)
+    old_user_name = models.CharField(max_length=100, blank=True, null=True)
     user = models.ForeignKey('User', blank=True, null=True)
     torrent = models.ForeignKey('Torrent', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'comment'
-
-
-class File(models.Model):
-    path = models.CharField(max_length=1024)
-    torrent = models.ForeignKey('Torrent')
-    size = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'file'
-        unique_together = (('path', 'torrent'),)
 
 
 class Status(models.Model):
@@ -78,7 +68,21 @@ class Torrent(models.Model):
     t_created_by = models.CharField(max_length=255, blank=True, null=True)
     t_comment = models.TextField(blank=True, null=True)
     t_announce = models.TextField(blank=True, null=True)
-
+    file_paths = ArrayField(
+        models.CharField(max_length=1024
+        ), blank=True, null=True)
+    file_sizes = ArrayField(
+        models.BigIntegerField(blank=True, null=True),
+        blank=True, null=True)
+    @property
+    def magnet(self):
+        return "magnet:?xt=urn:btih:{}&dn={}&tr=udp://zer0day.to:1337/announce\
+    &tr=udp://tracker.leechers-paradise.org:6969&tr=udp://explodie.org:6969&\
+    tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969\
+    &tr=http://tracker.baka-sub.cf/announce&\
+    tr=http://tracker.sukebei.nyaa.rip:69/announce&\
+    https://tracker.sukebei.nyaa.rip/announce".format(
+                    self.hash, self.name)
     class Meta:
         managed = False
         db_table = 'torrent'
@@ -86,7 +90,11 @@ class Torrent(models.Model):
 
 class User(models.Model):
     name = models.CharField(unique=True, max_length=255, blank=True, null=True)
+    email = models.CharField(unique=True, max_length=255, blank=True, null=True)
+    signed_up_date = models.DateTimeField(blank=True, null=True)
     status = models.ForeignKey('UserStatus', blank=True, null=True)
+    hashed_password = models.CharField(max_length=255, blank=True, null=True)
+    password_salt = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False

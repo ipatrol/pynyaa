@@ -15,52 +15,11 @@
                 <li><a href="https://sukebei.pantsu.cat">Other site</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
-            <form class="navbar-form navbar-right" role="search" action="/search" method="get">
+            <form class="navbar-form navbar-right" action="/home" role="search" method="get">
 <div class="form-group">
 
-    <select name="category" class="form-control input-sm">
-        <option value="_">All categories</option>
-        <option value="3_">Anime</option>
-        <option value="3_12">Anime - Anime MusicVideo</option>
-        <option value="3_5">Anime -English-translated</option>
-        <option value="3_13">Anime -Non-English-translated</option>
-        <option value="3_6">Anime - Raw</option>
-        <option value="2_">Audio</option>
-        <option value="2_3">Audio - Lossless</option>
-        <option value="2_4">Audio - Lossy</option>
-        <option value="4_">Literature</option>
-        <option value="4_7">Literature -English-translated</option>
-        <option value="4_8">Literature - Raw</option>
-        <option value="4_14">Literature -Non-English-translated</option>
-        <option value="5_">Live Action</option>
-        <option value="5_9">Live Action -English-translated</option>
-        <option value="5_10">Live Action -Idol/Promotional Video</option>
-        <option value="5_18">Live Action -Non-English-translated</option>
-        <option value="5_11">Live Action - Raw</option>
-        <option value="6_">Pictures</option>
-        <option value="6_15">Pictures - Graphics</option>
-        <option value="6_16">Pictures - Photos</option>
-        <option value="1_">Software</option>
-        <option value="1_1">Software - Applications</option>
-        <option value="1_2">Software - Games</option>
-    </select>
-    <select name="status" class="form-control input-sm">
-        <option value="">Show all</option>
-        <option value="2">Filter Remakes</option>
-        <option value="3">Trusted</option>
-        <option value="4">A+</option>
-    </select>
-
-
-    <div class="input-group">
-        <input name="query" class="form-control input-sm" placeholder="Search" value="" type="text">
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-sm btn-success">
-              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-              Search
-          </button>
-        </span>
-    </div>
+    {% include "search_common.html" %}
+    {% include "search_button.html" %}
 
                 </div>
             </form>
