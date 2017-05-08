@@ -23,7 +23,7 @@
             <li><a href="?page=9">9</a></li>
             <li><a href="?page=10">10</a></li>
 
-            <li><a id="page-next" href="{{ torrents.next_page_number }}" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+            <li><a id="page-next" href="?page={{ torrents.next_page_number }}" aria-label="Next"><span aria-hidden="true">»</span></a></li>
         </ul>
     </nav>
 
@@ -40,7 +40,7 @@
             {% for item in torrents %}
             <tr class="torrent-info">
                     <td>
-                        <a href="/search?c={{ item.category_id }}_{{ item.sub_category_id }}">
+                        <a href="/home?c={{ item.category_id }}_{{ item.sub_category_id }}">
 {#                            <img src="static//img/torrents/{{ item.category_id }}.png">#}
                             <img src="/static/img/torrents/{{ item.sub_category_id }}.png">
                         </a>
