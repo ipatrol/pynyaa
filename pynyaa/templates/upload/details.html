@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Upload torrent{% endblock %}
+
+{% macro selected(data, category, subcat) -%}
+    {%- if data == 'None' and category.id == 3 and subcat.id == 5 -%}
+        {{ ' selected' }}
+    {%- elif data and form.category.data == category.id|string + '_' + subcat.id|string -%}
+        {{ ' selected' }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% block content %}
+    <div class="blockBody">
+        <hr>
+        <form action="{{ url_for('main.upload_more', upload_hash=torrent.upload_hash) }}"
+              method="post">
+            <div class="hidden">
+                {{ form.csrf_token() }}
+            </div>
+
+            <div>
+                torrent info
+            </div>
+            <div class="form-group">
+                <label for="website">Website</label>
+                {{ form.website(class='form-control') }}
+            </div>
+            <div class="form-group">
+                <label for="description">Torrent Description</label>
+                {{ form.description(class='form-control', rows=10) }}
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+        {{ end }}
+    </div>
+{% endblock %}
