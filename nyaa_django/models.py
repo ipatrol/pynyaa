@@ -76,7 +76,12 @@ class Torrent(models.Model):
         blank=True, null=True)
     @property
     def magnet(self):
-        return "magnet:?xt=urn:btih:{}&dn={}&tr=udp://zer0day.to:1337/announce&tr=udp://tracker.leechers-paradise.org:6969&tr=udp://explodie.org:6969&tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969&tr=http://tracker.baka-sub.cf/announce".format(
+        return "magnet:?xt=urn:btih:{}&dn={}&tr=udp://zer0day.to:1337/announce\
+    &tr=udp://tracker.leechers-paradise.org:6969&tr=udp://explodie.org:6969&\
+    tr=udp://tracker.opentrackr.org:1337&tr=udp://tracker.coppersurfer.tk:6969\
+    &tr=http://tracker.baka-sub.cf/announce&\
+    tr=http://tracker.sukebei.nyaa.rip:69/announce&\
+    https://tracker.sukebei.nyaa.rip/announce".format(
                     self.hash, self.name)
     class Meta:
         managed = False
