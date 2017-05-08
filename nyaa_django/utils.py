@@ -1,5 +1,6 @@
 from operator import and_
 import string
+import math
 from django.db.models import Q, F
 
 LCHEX = string.hexdigits.translate(None,string.uppercase)
@@ -7,6 +8,14 @@ LCHEX = string.hexdigits.translate(None,string.uppercase)
 def is_hash(st):
     '''A bit of a hack. Remove all the hex chars and see what's left'''
     return len(st)==40 and st.isalnum() and st.translate(None,LCHEX) is not ''
+
+def pretty_size(size):
+    if not size:
+        return '0 B'
+    exp = min(4, int(math.log(size, 1024)))
+    suffix = ['B', 'KiB', 'MiB', 'GiB', 'TiB'][exp]
+    size = size / 1024**exp
+    return '{size:.1f} {suffix}'.format(size=size,suffix=suffix)
 
 class SearchQuery(object):
     def __init__(self, qd):

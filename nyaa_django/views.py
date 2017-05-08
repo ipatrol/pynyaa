@@ -30,6 +30,9 @@ def main(request):
                             "search":search,
                             "sort":sort})
 
+def view(request, tid):
+    torrent = models.Torrent.objects.get(id=int(tid))
+    return render(request,"view.html",{"torrent":torrent})
 
 def index(request):
     return render(request,"home.html")
