@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secret</title>
+    {% include "cdn.html" %}
+</head>
+<body>
+{% include "navbar.html" %}
+<div style="padding-top: 10rem"></div>
+<div class="container" id="container">
+    <div class="advanced-search">
+        <div class="heading">Advanced Search</div>
+        <form class="navbar-form" action="/home" role="search" method="get">
+            <div class="form-group">
+            	{% include "search_common.html" %}
+					{% include "search_advanced.html" %}
+					{% include "search_button.html" %}
+            </div>
+        </form>
+    </div>
+
+</div>
+<div class="blockBody">
+	{% block body %}
+	{% endblock %}
+</div>
+<div style="padding-top: 5rem"></div>
+</body>
+</html> 
