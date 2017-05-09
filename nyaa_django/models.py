@@ -8,6 +8,7 @@
 # Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
 # into your database.
 from __future__ import unicode_literals
+import itertools
 
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -83,6 +84,9 @@ class Torrent(models.Model):
     tr=http://tracker.sukebei.nyaa.rip:69/announce&\
     https://tracker.sukebei.nyaa.rip/announce".format(
                     self.hash, self.name)
+    @property
+    def file_info(self):
+        return itertools.izip(self.file_paths,self.file_sizes)
     class Meta:
         managed = False
         db_table = 'torrent'

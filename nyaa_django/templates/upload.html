@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Upload torrent{% endblock %}
+
+{% block body %}
+        <hr>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            {{ crsf_token }}
+            <table style="float:center;position:absolute;left:25%">
+            {{form.as_table }}
+            <tr><td>
+            <br/>
+            <button type="submit" class="btn btn-success" style="position:relative;left:100%">Upload</button>
+            </td></tr>
+            </table>
+        </form>
+{% endblock %}

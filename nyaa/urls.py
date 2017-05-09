@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^home/',views.main),
     url(r'^search',views.main),
     url(r'^view/([0-9]+)',views.view),
-    url(r'^/',views.index)
+    url(r'^upload/',views.upload),
+    url(r'^$',views.index)
 ]
