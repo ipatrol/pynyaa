@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Upload torrent{% endblock %}
+
+{% macro selected(data, category, subcat) -%}
+    {%- if data == 'None' and category.id == 3 and subcat.id == 5 -%}
+        {{ ' selected' }}
+    {%- elif data and form.category.data == category.id|string + '_' + subcat.id|string -%}
+        {{ ' selected' }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% block content %}
+    <div class="blockBody">
+        <hr>
+        <form action="{{ url_for('main.upload') }}" method="post" enctype="multipart/form-data">
+            <div class="hidden">
+                {{ form.csrf_token() }}
+            </div>
+            <div class="form-group{% if form.torrent.errors %} has-error{% endif %}">
+                <label for="torrent">Torrent file upload</label>
+                {{ form.torrent(class='form-control') }}
+                {% if form.torrent.errors %}
+                <p class="help-block">{{ form.torrent.errors|join(', ') }}</p>
+                {% endif %}
+                <p class="help-block">Upload a torrent file to pre-fill information</p>
+            </div>
+            <div class="form-group{% if form.category.errors %} has-error{% endif %}">
+                <label for="category">Category</label>
+                <select name="category" id="category" class="form-control">
+                    {% for category in categories %}
+                        <optgroup label="{{ category.name }}">
+                            {% for subcat in category.sub_categories %}
+                                <option value="{{ category.id }}_{{ subcat.id }}"
+                                    {{- selected(form.category.data, category, subcat) }}>
+                                    {{- category.name }} - {{ subcat.name -}}
+                                </option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+                {% if form.category.errors %}
+                    <p class="help-block">{{ form.category.errors|join(', ') }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-success">Upload</button>
+        </form>
+        {{ end }}
+    </div>
+{% endblock %}
