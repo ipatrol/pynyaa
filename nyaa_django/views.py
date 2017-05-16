@@ -1,7 +1,8 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.shortcuts import render, render_to_response
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django import http
 from nyaa_django import models, utils, forms
+from datetime import datetime
 # Create your views here.
 
 
@@ -38,12 +39,34 @@ def view(request, tid):
 def upload(request):
     if request.method == "POST":
         form = forms.UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            # PROCESSING CODE #
-            return HttpResponseRedirect('/home')
+        user = request.user
+        if form.is_valid() and user.is_authenticated:
+            dat = request.FILES["file"].read()
+            cat, subcat = utils.parse_cats(form.category)
+            pars = {
+                "is_sqlite_import":False,
+                "category":cat,
+                "sub_category":subcat,
+                "date":datetime.utcnow(),
+                "downloads":0,
+                "stardom":0,
+                "website_link":form.website,
+                "description":form.description
+            }
+            try:
+                tinfo = utils.TorrentInfo(dat)
+            except ValueError:
+                return http.HttpResponseBadRequest(
+                    "Not a valid torrent file!", "text/plain")
+            tmod = tinfo.get_model(models.Torrent,**pars)
+            tmod.save()
+            return utils.HttpResponseSeeOther('/view/{}'.format(tmod.id))
+        else:
+            return http.HttpResponseBadRequest(
+                "Invalid arguments or not logged in.", "text/plain")
     else:
         form = forms.UploadForm()
-    return render_to_response('upload.html',{'form':form})
+    return render('upload.html',{'form':form})
 
 def index(request):
-    return HttpResponseRedirect('/home')
+    return redirect('/home')

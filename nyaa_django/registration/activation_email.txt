@@ -1,0 +1,8 @@
+Please click on or otherwise follow the following URL to activate your account:
+
+http://{{ site.domain }}{% url 'registration_activate' activation_key %}
+
+If you did not request an account with us, just ignore it and the registration will expire in {{expiration_days}} days.
+
+If you are repeatedly getting said unwanted emails, just send us a yell to admin@{{site.domain}} and we will apply the appropriate
+agricultural implement to the offender's backside ;-)

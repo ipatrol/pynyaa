@@ -10,8 +10,13 @@
 from __future__ import unicode_literals
 import itertools
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth import models as auth
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+
+User = get_user_model()
 
 class Category(models.Model):
     name = models.CharField(max_length=1024, blank=True, null=True)
@@ -19,20 +24,6 @@ class Category(models.Model):
     class Meta:
         managed = False
         db_table = 'category'
-
-
-class Comment(models.Model):
-    text = models.TextField(blank=True, null=True)
-    date = models.DateTimeField(blank=True, null=True)
-    av = models.CharField(max_length=255, blank=True, null=True)
-    old_user_name = models.CharField(max_length=100, blank=True, null=True)
-    user = models.ForeignKey('User', blank=True, null=True)
-    torrent = models.ForeignKey('Torrent', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'comment'
-
 
 class Status(models.Model):
     name = models.CharField(max_length=20, blank=True, null=True)
@@ -53,6 +44,7 @@ class SubCategory(models.Model):
 
 
 class Torrent(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=1024)
     hash = models.CharField(max_length=40)
     is_sqlite_import = models.NullBooleanField()
@@ -75,6 +67,7 @@ class Torrent(models.Model):
     file_sizes = ArrayField(
         models.BigIntegerField(blank=True, null=True),
         blank=True, null=True)
+    user = models.ForeignKey(User, blank=True, null=True)
     @property
     def magnet(self):
         return "magnet:?xt=urn:btih:{}&dn={}&tr=udp://zer0day.to:1337/announce\
@@ -91,23 +84,14 @@ class Torrent(models.Model):
         managed = False
         db_table = 'torrent'
 
-
-class User(models.Model):
-    name = models.CharField(unique=True, max_length=255, blank=True, null=True)
-    email = models.CharField(unique=True, max_length=255, blank=True, null=True)
-    signed_up_date = models.DateTimeField(blank=True, null=True)
-    status = models.ForeignKey('UserStatus', blank=True, null=True)
-    hashed_password = models.CharField(max_length=255, blank=True, null=True)
-    password_salt = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'user'
-
-
-class UserStatus(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
+class Comment(models.Model):
+    text = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
+    av = models.CharField(max_length=255, blank=True, null=True)
+    old_user_name = models.CharField(max_length=100, blank=True, null=True)
+    user = models.ForeignKey(User, blank=True, null=True)
+    torrent = models.ForeignKey(Torrent, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'user_status'
+        db_table = 'comment'

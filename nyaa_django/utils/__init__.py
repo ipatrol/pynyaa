@@ -6,6 +6,7 @@ import string
 import math
 from django.db.models import Q, F
 from django.core import exceptions
+from django.http import response
 import bencode
 
 LCHEX = string.hexdigits.translate(None,string.uppercase)
@@ -33,6 +34,10 @@ def parse_cats(cstr):
     except ValueError:
         return (None, None)
     return (int_or_none(ct), int_or_none(sc))
+
+class HttpResponseSeeOther(response.HttpResponseRedirectBase):
+    '''Implement these redirects properly according to IETF standards'''
+    status_code = 303
 
 class SearchQuery(object):
     def __init__(self, qd):
@@ -90,7 +95,7 @@ class TorrentInfo(object):
     Why no one seems to have developed a better library is beyond me.'''
     def __init__(torrent, data):
         '''Odd variable name choice to ease porting'''
-        torrent_data = bencode.bdecode(torrent_file.stream.read())
+        torrent_data = bencode.bdecode(data)
         bencoded_info = bencode.bencode(torrent_data['info'])
         info_hash = hashlib.sha1(bencoded_info).hexdigest()
 

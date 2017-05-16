@@ -134,3 +134,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     'static',
 ]
+# Change for production
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+ACCOUNT_ACTIVATION_DAYS = 1
+REGISTRATION_OPEN = False
+REGISTRATION_SALT = r"1o35rjUkFk@q.GK_dWS5V,uM,a{V+oKsXKvYm<0wHMp)kB)$bJ+0lJm=E(ish"

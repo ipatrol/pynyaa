@@ -11,7 +11,7 @@
 # Written by Petru Paler
 
 
-class BTFailure(Exception):
+class BTFailure(ValueError):
     pass
 
 

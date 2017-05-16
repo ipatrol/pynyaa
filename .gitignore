@@ -201,6 +201,7 @@ ENV/
 [Ll]ib64
 [Ll]ocal
 [Ss]cripts
+[Ss]hare
 pyvenv.cfg
 pip-selfcheck.json
 
