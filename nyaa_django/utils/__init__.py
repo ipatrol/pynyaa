@@ -109,9 +109,9 @@ class TorrentInfo(object):
         # info keys: length, name, piece length, pieces
         info = torrent_data['info']
 
-        torrent.name = info['name']
-        torrent.hash = info_hash
-
+        torrent.torrent_name = info['name']
+        torrent.torrent_hash = info_hash
+        torrent.date = datetime.utcnow()
         torrent.t_announce = torrent_data['announce']
         torrent.t_comment = torrent_data['comment']
         torrent.t_created_by = torrent_data['created by']

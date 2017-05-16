@@ -42,12 +42,34 @@ class SubCategory(models.Model):
         managed = False
         db_table = 'sub_category'
 
+class Comments(models.Model):
+    comment_id = models.AutoField(primary_key=True)
+    torrent = models.ForeignKey('Torrents', models.DO_NOTHING)
+    user = models.ForeignKey(User, models.DO_NOTHING)
+    content = models.TextField()
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField(blank=True, null=True)
 
-class Torrent(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=1024)
-    hash = models.CharField(max_length=40)
-    is_sqlite_import = models.NullBooleanField()
+    class Meta:
+        managed = False
+        db_table = 'comments'
+
+
+class CommentsOld(models.Model):
+    torrent = models.ForeignKey('Torrents', models.DO_NOTHING)
+    username = models.TextField()
+    content = models.TextField()
+    date = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'comments_old'
+
+
+class Torrents(models.Model):
+    torrent_id = models.AutoField(primary_key=True)
+    torrent_name = models.CharField(max_length=1024)
+    torrent_hash = models.CharField(max_length=40)
     category = models.ForeignKey(Category, blank=True, null=True)
     sub_category = models.ForeignKey(SubCategory, blank=True, null=True)
     status = models.ForeignKey(Status, blank=True, null=True)
@@ -67,7 +89,9 @@ class Torrent(models.Model):
     file_sizes = ArrayField(
         models.BigIntegerField(blank=True, null=True),
         blank=True, null=True)
-    user = models.ForeignKey(User, blank=True, null=True)
+    uploader = models.ForeignKey(User, blank=True, null=True,
+                    models.DO_NOTHING, db_column='uploader')
+    deleted_at = models.DateTimeField(blank=True, null=True)
     @property
     def magnet(self):
         return "magnet:?xt=urn:btih:{}&dn={}&tr=udp://zer0day.to:1337/announce\
@@ -76,22 +100,10 @@ class Torrent(models.Model):
     &tr=http://tracker.baka-sub.cf/announce&\
     tr=http://tracker.sukebei.nyaa.rip:69/announce&\
     https://tracker.sukebei.nyaa.rip/announce".format(
-                    self.hash, self.name)
+                    self.torrent_hash, self.torrent_name)
     @property
     def file_info(self):
         return itertools.izip(self.file_paths,self.file_sizes)
     class Meta:
         managed = False
-        db_table = 'torrent'
-
-class Comment(models.Model):
-    text = models.TextField(blank=True, null=True)
-    date = models.DateTimeField(blank=True, null=True)
-    av = models.CharField(max_length=255, blank=True, null=True)
-    old_user_name = models.CharField(max_length=100, blank=True, null=True)
-    user = models.ForeignKey(User, blank=True, null=True)
-    torrent = models.ForeignKey(Torrent, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'comment'
+        db_table = 'torrents'

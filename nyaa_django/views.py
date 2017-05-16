@@ -13,9 +13,9 @@ def main(request):
     sec = search.construct()
     src = sort.construct()
     if sec:
-        dbq = models.Torrent.objects.filter(sec)
+        dbq = models.Torrents.objects.filter(sec)
     else:
-        dbq = models.Torrent.objects.all()
+        dbq = models.Torrents.objects.all()
     if src:
         dbs = dbq.order_by(src)
     else:
@@ -33,7 +33,7 @@ def main(request):
                             "sort":sort})
 
 def view(request, tid):
-    torrent = models.Torrent.objects.get(id=int(tid))
+    torrent = models.Torrents.objects.get(id=int(tid))
     return render(request,"view.html",{"torrent":torrent})
 
 def upload(request):
@@ -44,21 +44,20 @@ def upload(request):
             dat = request.FILES["file"].read()
             cat, subcat = utils.parse_cats(form.category)
             pars = {
-                "is_sqlite_import":False,
-                "category":cat,
-                "sub_category":subcat,
-                "date":datetime.utcnow(),
+                "category_id":cat,
+                "sub_category_id":subcat,
                 "downloads":0,
                 "stardom":0,
                 "website_link":form.website,
-                "description":form.description
+                "description":form.description,
+                "uploader_id":user.id
             }
             try:
                 tinfo = utils.TorrentInfo(dat)
             except ValueError:
                 return http.HttpResponseBadRequest(
                     "Not a valid torrent file!", "text/plain")
-            tmod = tinfo.get_model(models.Torrent,**pars)
+            tmod = tinfo.get_model(models.Torrents,**pars)
             tmod.save()
             return utils.HttpResponseSeeOther('/view/{}'.format(tmod.id))
         else:
