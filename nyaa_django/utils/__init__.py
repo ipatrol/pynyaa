@@ -56,7 +56,7 @@ class SearchQuery(object):
         else:
             self.max = 20
         self.query = qd.get('query', '').lower()
-        self.sv = search.SearchVector('torrent_name','description')
+        self.sv = search.SearchVector('name','description')
     def construct(self):
         qfs = list()
         if self.category:
@@ -67,7 +67,7 @@ class SearchQuery(object):
             qfs.append(Q(category_id=self.status))
         if qfs: return reduce(and_, qfs)
     def dbapply(self, objs):
-        qfs = Q(torrent_id__isnull=False) # Always true starter value
+        qfs = Q(id__isnull=False) # Always true starter value
         qfc = self.construct()
         if qfc is not None:
             qfs &= qfc
@@ -125,8 +125,8 @@ class TorrentInfo(object):
         # info keys: length, name, piece length, pieces
         info = torrent_data['info']
 
-        torrent.torrent_name = info['name']
-        torrent.torrent_hash = info_hash
+        torrent.name = info['name']
+        torrent.hash = info_hash
         torrent.date = datetime.utcnow()
         torrent.t_announce = torrent_data['announce']
         torrent.t_comment = torrent_data['comment']

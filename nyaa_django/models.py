@@ -67,9 +67,9 @@ class CommentsOld(models.Model):
 
 
 class Torrents(models.Model):
-    torrent_id = models.AutoField(primary_key=True)
-    torrent_name = models.CharField(max_length=1024)
-    torrent_hash = models.CharField(max_length=40)
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=1024)
+    hash = models.CharField(max_length=40)
     category = models.ForeignKey(Category, blank=True, null=True)
     sub_category = models.ForeignKey(SubCategory, blank=True, null=True)
     status = models.ForeignKey(Status, blank=True, null=True)
@@ -90,8 +90,7 @@ class Torrents(models.Model):
         models.BigIntegerField(blank=True, null=True),
         blank=True, null=True)
     uploader = models.ForeignKey(User, blank=True, null=True,
-                    models.DO_NOTHING, db_column='uploader')
-    deleted_at = models.DateTimeField(blank=True, null=True)
+                    on_delete=models.DO_NOTHING, db_column='uploader')
     @property
     def magnet(self):
         return "magnet:?xt=urn:btih:{}&dn={}&tr=udp://zer0day.to:1337/announce\
@@ -100,10 +99,9 @@ class Torrents(models.Model):
     &tr=http://tracker.baka-sub.cf/announce&\
     tr=http://tracker.sukebei.nyaa.rip:69/announce&\
     https://tracker.sukebei.nyaa.rip/announce".format(
-                    self.torrent_hash, self.torrent_name)
+                    self.hash, self.name)
     @property
     def file_info(self):
         return itertools.izip(self.file_paths,self.file_sizes)
     class Meta:
-        managed = False
-        db_table = 'torrents'
+        db_table = 'torrent'

@@ -25,7 +25,7 @@ def main(request):
                             "sort":sort})
 
 def view(request, tid):
-    torrent = models.Torrents.objects.get(torrent_id=int(tid))
+    torrent = models.Torrents.objects.get(id=int(tid))
     return render(request,"view.html",{"torrent":torrent})
 
 def upload(request):
