@@ -10,16 +10,8 @@ def main(request):
     page = request.GET.get('page', 1)
     search = utils.SearchQuery(request.GET)
     sort = utils.SortQuery(request.GET)
-    sec = search.construct()
-    src = sort.construct()
-    if sec:
-        dbq = models.Torrents.objects.filter(sec)
-    else:
-        dbq = models.Torrents.objects.all()
-    if src:
-        dbs = dbq.order_by(src)
-    else:
-        dbs = dbq.order_by('-id')
+    dbq = search.dbapply(models.Torrents.objects)
+    dbs = sort.dbapply(dbq)
     paginator = Paginator(dbs, search.max)
     try:
         torrents = paginator.page(page)
@@ -33,7 +25,7 @@ def main(request):
                             "sort":sort})
 
 def view(request, tid):
-    torrent = models.Torrents.objects.get(id=int(tid))
+    torrent = models.Torrents.objects.get(torrent_id=int(tid))
     return render(request,"view.html",{"torrent":torrent})
 
 def upload(request):

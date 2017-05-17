@@ -4,6 +4,7 @@ import hashlib
 import posixpath
 import string
 import math
+from django.contrib.postgres import search
 from django.db.models import Q, F
 from django.core import exceptions
 from django.http import response
@@ -55,24 +56,34 @@ class SearchQuery(object):
         else:
             self.max = 20
         self.query = qd.get('query', '').lower()
+        self.sv = search.SearchVector('torrent_name','description')
     def construct(self):
         qfs = list()
         if self.category:
             qfs.append(Q(category_id=self.category))
         if self.subcategory:
-            qfs.append(Q(category_id=self.subcategory))
+            qfs.append(Q(sub_category_id=self.subcategory))
         if self.status:
             qfs.append(Q(category_id=self.status))
-        if is_hash(self.query):
-            qfs = [Q(hash=self.query)] # Having a hash overrides all else
+        if qfs: return reduce(and_, qfs)
+    def dbapply(self, objs):
+        qfs = Q(torrent_id__isnull=False) # Always true starter value
+        qfc = self.construct()
+        if qfc is not None:
+            qfs &= qfc
+        if not self.query:
+            return objs.filter(qfs)
+        elif is_hash(self.query):
+            qfs = Q(hash=self.query) # Having a hash overrides all else
+            return objs.filter(qfs)
         elif self.query.startswith('=~'):
             qr = self.query[2:].strip()
-            qfs.append(Q(name__iregex=qr))
+            qfs &= Q(name__iregex=qr)
+            return objs.filter(qfs)
         else:
-            words = self.query.split()
-            for word in words:
-                qfs.append(Q(name__icontains=word))
-        if qfs: return reduce(and_, qfs)
+            ant = objs.annotate(search=self.sv)
+            qfs &= Q(search=self.query)
+            return ant.filter(qfs)
         
 class SortQuery(object):
     def __init__(self, qd):
@@ -88,6 +99,11 @@ class SortQuery(object):
         else:
             srt = None
         return srt
+    def dbapply(self, objs):
+        cons = self.construct()
+        if cons is None:
+            cons = '-id'
+        return objs.order_by(cons)
     
 class TorrentInfo(object):
     '''There's *supposed* to be a library for this, but it's in C++/Boost,
