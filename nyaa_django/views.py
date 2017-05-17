@@ -57,7 +57,7 @@ def upload(request):
                 "Invalid arguments or not logged in.", "text/plain")
     else:
         form = forms.UploadForm()
-    return render('upload.html',{'form':form})
+    return render(request,'upload.html',{'form':form})
 
 def index(request):
     return redirect('/home')

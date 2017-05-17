@@ -11,6 +11,7 @@
 *.mdb
 *.pdb
 *.sql
+*.dump
 
 ### Django ###
 *.log
